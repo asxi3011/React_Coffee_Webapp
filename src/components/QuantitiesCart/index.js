@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react"
 import {useSelector} from 'react-redux'
 import {getQuantitiesCart} from '../../redux/selector'
-function Cart() {
+function QuantitiesCart() {
     const quantities = useSelector(getQuantitiesCart);
     
     useEffect(()=>{
@@ -34,4 +34,4 @@ function Cart() {
     )
 }
 
-export default Cart
+export default QuantitiesCart

@@ -1,6 +1,6 @@
 import { React} from "react"
 import {useDispatch,useSelector} from 'react-redux';
-import detailProductSlice from "../DetailProduct/detailProductSlice";
+
 
 export default function Size({value,name,checked,setChecked}) {  
     const dispatch = useDispatch();

@@ -4,7 +4,7 @@ import {Modal} from 'react-bootstrap'
 import {useDispatch,useSelector} from 'react-redux'
 
 import ListSize from '../ListSize'
-import quantitiesCartSlice from '../QuantitiesCart/quantitiesCartSlice'
+
 import cartSlice from "../Cart/cartSlice";
 
 import {getCart,getQuantitiesCart} from '../../redux/selector'
@@ -70,7 +70,7 @@ const onClickSessions = () => {
     localStorage.setItem("arrayCart",JSON.stringify(arrayCP));
     localStorage.setItem("countQuanity",quantitiesCart)
     dispatch(cartSlice.actions.updateCart(JSON.stringify(arrayCP)));
-    dispatch(quantitiesCartSlice.actions.setQuantitiesCart(quantitiesCart));
+    dispatch(cartSlice.actions.setQuantities(quantitiesCart));
     props.onHide();
 };
 

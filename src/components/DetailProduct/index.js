@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import {useDispatch} from 'react-redux'
 import {fetchDetailsProductRequest} from '../../redux/callApi'
 import ListSize from '../ListSize'
-import quantitiesCartSlice from '../QuantitiesCart/quantitiesCartSlice'
+
 import cartSlice from "../Cart/cartSlice";
 import { BsFillFileTextFill } from "react-icons/bs";
 import { FaPlus, FaMinus } from "react-icons/fa";
@@ -74,7 +74,7 @@ const DetailProduct = () => {
         localStorage.setItem('arrayCart', JSON.stringify(cart))
         localStorage.setItem('countQuanity', count + countPlus)
         dispatch(cartSlice.actions.updateCart(JSON.stringify(cart)));
-        dispatch(quantitiesCartSlice.actions.setQuantitiesCart(count+countPlus));
+        dispatch(cartSlice.actions.setQuantities(count+countPlus));
         customToast();
         setCount(1)
         setNote('');

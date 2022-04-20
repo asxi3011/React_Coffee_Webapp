@@ -3,36 +3,27 @@ import React from "react";
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from 'react';
 import { useSelector,useDispatch} from 'react-redux';
-import quantitiesCartSlice from '../QuantitiesCart/quantitiesCartSlice'
-import ItemCart from '../ItemCart/index'
 import axios from 'axios';
-import {getCart} from '../../redux/selector'
 import { io } from "socket.io-client";
-import cartSlice from "./cartSlice";
-
-
-
-function Cart({coupon}){
+import Voices from './Voices'
+import Info from './Info'
+import cartSlice from '../Cart/cartSlice'
+import {getPriceCoupon,getPriceTotal,getPriceAll,getCoupon,getCart,getName,getEmail,getPhone,getAddress,getNote,getPayments} from '../../redux/selector'
+function Cart(){
   
   let navigate = useNavigate();
   const dispatch = useDispatch()
-  const arrayP = useSelector(getCart);
-  console.log('mang',arrayP)
-  const [name,setName] = useState('');
-  const [email,setEmail] = useState(''); 
-  const [phone,setPhone] = useState('');
-  const [address,setAddress] = useState('');
-  const [note,setNote] = useState('');
-  const [priceTotal,setPriceTotal] = useState(getThanhTien(arrayP));
-  const [priceCoupon,setPriceCoupon] = useState(getPriceCoupon(priceTotal,coupon));
-  const [priceAll,setPriceAll] = useState(getTotalWithCoupon(priceTotal,priceCoupon));
-
-  useEffect(()=>{
-    const priceTotalNow = getThanhTien(arrayP);
-    const priceCouponNow = getPriceCoupon(priceTotalNow,coupon)
-    setPriceCoupon(priceCouponNow);
-    setPriceAll(getTotalWithCoupon(priceTotalNow,priceCouponNow))
-  },[coupon,priceTotal,arrayP])
+  const name = useSelector(getName);
+  const email = useSelector(getEmail);
+  const phone = useSelector(getPhone);
+  const address= useSelector(getAddress);
+  const note = useSelector(getNote);
+  const priceCoupon = useSelector(getPriceCoupon);
+  const coupon = useSelector(getCoupon);
+  const priceTotal = useSelector(getPriceTotal);
+  const priceAll = useSelector(getPriceAll);
+  const carts = useSelector(getCart);
+  const payments = useSelector(getPayments);
   const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
@@ -40,56 +31,33 @@ function Cart({coupon}){
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
   };
+  function clearCart() {
+    sessionStorage.removeItem("arrayCart");
+    sessionStorage.removeItem("countQuanity");
+}
   const validateCheckEmpty = (value)=>{
       return value.trim() !== "";
   }
   const validateInput = (iname,iadress,iphone,iemail)=>{
     return validateEmail(iemail) && validateCheckEmpty(iname) && validateCheckEmpty(iphone) && validateCheckEmpty(iadress);
   }
-  function clearCart() {
-    sessionStorage.removeItem("arrayCart");
-    sessionStorage.removeItem("countQuanity");
-}
-  function getThanhTien(array){
-    return array.reduce((preCount,item)=>preCount+item.priceTotal,0);
-  }
-  function getTotalWithCoupon(thanhTien,priceCoupon){
-    console.log("all",thanhTien);
-    console.log("Coupon",priceCoupon);
-      return thanhTien-priceCoupon+30000; // 30k là phí ship (code cứng);
-  }
-  function getPriceCoupon(thanhtien,coupon){
-    switch(coupon){
-      case "30phantram":
-        return Number(thanhtien)*0.3;
-      case "19tuoixanh":
-        return 19000;
-      default:
-        return 0;
-    }
-  }
-  const getCountArray=(array)=>{
-    return array.reduce((preCount,item)=>preCount+item.quantities,0);
-  }
-  const handleRemove=(index)=>{
-    const newList=arrayP.filter((order,indexOrder)=>indexOrder !== index);
-    const quantities = getCountArray(newList);
-    localStorage.setItem('arrayCart',JSON.stringify(newList));
-    localStorage.setItem('countQuanity',JSON.stringify(quantities));
-    const thanhtien = getThanhTien(newList);
-    const priceCoupon = getPriceCoupon(thanhtien,coupon);
-    const priceAll = getTotalWithCoupon(thanhtien,priceCoupon);
-    dispatch(cartSlice.actions.updateCart(JSON.stringify(newList)))
-
-    setPriceTotal(thanhtien);
-    setPriceCoupon(priceCoupon);
-    setPriceAll(priceAll);
-    dispatch(quantitiesCartSlice.actions.setQuantitiesCart(quantities))
-  }
-
   const redirectOnline=()=>{
+    
     if(validateInput(name,address,phone,email)){
-    //  setLoading(true);
+      localStorage.setItem('nameCus',name) 
+      localStorage.setItem('emailCus',email) 
+      localStorage.setItem('phoneCus',phone) 
+      localStorage.setItem('addressCus',address) 
+      localStorage.setItem('noteCus',note) 
+      if(payments==="VNPay"){
+        axios.post('https://sever-coffeehouse.herokuapp.com/create_payment_url', {
+            priceTotal:priceTotal,
+        })
+        .then(function (responseCode) {
+           console.log(responseCode)
+        })
+    }
+    else{
       axios.post('https://sever-coffeehouse.herokuapp.com/order', {
         noteOrder: note,
         hotenOrder: name,
@@ -99,11 +67,12 @@ function Cart({coupon}){
         priceCharge: 30000,
         priceCoupon: priceCoupon,
         nameCoupon: coupon,
-        priceTotal: priceAll,
-        listProductOrder: arrayP,
-        payment: "Tiền mặt",
-      })
-      .then(function (response) {
+        priceTotal: priceTotal,
+        priceAll : priceAll,
+        listProductOrder: carts,
+        payment: payments,
+    })
+    .then(function (response) {
         clearCart();
         var idOrder = response.data.idOrder;
         const socket = io("https://sever-coffeehouse.herokuapp.com", { transports : ['websocket'] });
@@ -117,31 +86,33 @@ function Cart({coupon}){
         })
         .then(function (responseMail) {
         //  setLoading(false);
-          alert("Đặt hàng thành công ! Quý khách vui lòng kiểm tra email để biết được id đơn hàng và tra cứu thông tin !")
+        alert("Đặt hàng thành công ! Quý khách vui lòng kiểm tra email để biết được id đơn hàng và tra cứu thông tin !")
             localStorage.removeItem('arrayCart');
             localStorage.removeItem('countQuanity');
+            dispatch(cartSlice.actions.updateCart([]));
             navigate("/");
-            //setarrayP("");
-            // setLocalCount(0);
+
 
         })
     
-      })
-      .catch(function (error) {
+    })
+    .catch(function (error) {
         console.log(error);
-      });
+    });
+    }
+   
     }
     else{
-      //setLoading(false);
-      alert("Vui long nhập email và thông tin không được để trống")
+    
+    alert("Vui long nhập email và thông tin không được để trống")
     }
     
   }
+ 
 
+  
   return (  
-    arrayP.length>0 ?
     <div className="pd-header">
-    {console.log('đã render',arrayP)}
       <div className="container">
         <div className="name2">
           <div className="mt-5 text-center fs-4">
@@ -151,110 +122,38 @@ function Cart({coupon}){
             </span>
           </div>
               <div className="row my-5">
+                <Info/>
                 <div className="col-6">
-                  <div className="pd-12">
-                  <div className="d-flex align-items-center py-3 header">
-                      <span className="fw-bold fs-5">
-                        Giao hàng
-                        <img className="img-min" src="https://minio.thecoffeehouse.com/images/tch-web-order/Delivery2.png" alt="" />
-                      </span>
-                    </div>
-                    <div>
-                        <div className="line_bottom" />
-                              <input type="text" value={email} onChange={(e)=>{setEmail(e.target.value);console.log(e.target.value)}} name="emailCus" className="form-control input-text-address" placeholder="Email" required />
-                              <input type="text" value={address} onChange={(e)=>{console.log(e.target.value);setAddress(e.target.value)}} name="addressCus" className="form-control input-text-address" placeholder="Địa chỉ" required />
-                              <input type="text" value={name} onChange={(e)=>setName(e.target.value)}name="nameCus" className="form-control input-text-address" placeholder="Tên người nhận" required />
-                              <input type="text" value={phone} onChange={(e)=>setPhone(e.target.value)}name="numberCus" className="form-control input-text-address" placeholder="Số điện thoại" required />
-                              <input type="text" value={note} onChange={(e)=>setNote(e.target.value)} name="noteCus" className="form-control input-text-address" placeholder="Thêm hướng dẫn giao hàng" />
-                      </div>
-
-                    <div className="d-flex align-items-center py-3 header">
-                      <span className="fw-bold fs-5">
-                        Phương thức thanh toán
-                      </span>
-                    </div>
-                    <div className="line_bottom" />
-                    <div>
-        <div className="form-check my-3 fs-5">
-        <input className="form-check-input rad-primary" type="radio" name="radPayment" defaultValue="Tiền mặt" id="radPayment" defaultChecked />
-        <label className="form-check-label" htmlFor="radPayment">
-          <i className="fas fa-money-bill text-success" /> Tiền mặt
-        </label>
-        </div>
-    </div>
-                  </div>
-                </div>
-                <div className="col-6">
+                  
                     <div className="bd-cart">
-                      <div>
-                        <div className="d-flex justify-content-between align-items-center py-3 header">
-                          <span className="fw-bold fs-5">
-                            Các món đã chọn
-                          </span>
-                          <a href="/" className="btn btn-no-background a-none text-dark">
-                            Thêm món
-                          </a>
-                        </div>
-                        <div className="line_bottom">
-                        </div>
-                        <div className="row" id="listProductCart">
-                           {arrayP.map((itemCart,index)=><ItemCart key={index} index={index} itemCart={itemCart} handleRemove={handleRemove}/>)} 
-                          </div>
-                        <div className="fw-bold fs-5 py-2">
-                          Tổng cộng
-                        </div>
-                        <div className="line_bottom" />
-                        <div >
-                          <div className="py-3 d-flex justify-content-between align-items-center bd-bottom">
-                            <span >
-                              Thành tiền
-                            </span>
-                            <span id="price_total" >
-                                {Number(getThanhTien(arrayP)).toLocaleString("vi-VN",{style:"currency", currency:"VND"})}
-                            </span>
-                          </div>
-                          <div className="py-3 d-flex justify-content-between align-items-center bd-bottom">
-                            <span >
-                              Phí vận chuyển
-                            </span>
-                            <span id="price_charge_show" >  {Number(30000).toLocaleString("vi-VN",{style:"currency", currency:"VND"})}
-                            </span>
-                            <span id="price_charge"  hidden>30000</span>
-                          </div>
-                          <div className="py-3 d-flex justify-content-between align-items-center">
-                            <div id="btn_show_modal_KM" className="color-primary pe-cursor">Khuyến mãi</div>
-                            <div id="content-coupon">
-                                {(coupon ==="" || coupon === null) ? "" : `${coupon}(${priceCoupon.toLocaleString("vi-VN",{style:"currency", currency:"VND"})})`}
-                            </div>
-                          </div>
-                          <div className="bg-getAll py-3">
-                            
-                              <div className="d-flex align-items-center justify-content-between">
-                                <div className="text-white">
-                                  <div>Thành tiền</div>
-                                  <div id="price_total_with_charge_show" className="fw-bold" >{priceAll.toLocaleString("vi-VN",{style:"currency", currency:"VND"})}</div>
-                                  <input id="price_total_with_charge" name="priceTotal" className="fw-bold" hidden />
-                                </div>
-                                <button onClick={()=>{/*setLoading(true);*/redirectOnline()}} className="btn btn-light color-primary">
-                                  Đặt hàng
-                                </button>
-                              </div>
+      <div>
+          <Voices redirectOnline={redirectOnline}/>
+          <div >
+                      
+                      <div className="bg-getAll py-3">
                         
+                          <div className="d-flex align-items-center justify-content-between">
+                            <div className="text-white">
+                              <div>Thành tiền</div>
+                              <div id="price_total_with_charge_show" className="fw-bold" >{priceAll.toLocaleString("vi-VN",{style:"currency", currency:"VND"})}</div>
+                              <input id="price_total_with_charge" name="priceTotal" className="fw-bold" hidden />
+                            </div>
+                            <button onClick={()=>{/*setLoading(true);*/redirectOnline()}} className="btn btn-light color-primary">
+                              Đặt hàng
+                            </button>
                           </div>
-                        </div>
+                    
                       </div>
-                    </div>
-                  </div>
+                   </div>
+      </div>
+      </div>
+                   
+                </div>
               </div>
             </div>
           </div>
          
     </div>
-   
-   
-    :''
-    
-    
   )
 }
 

@@ -2,23 +2,58 @@ import {createSlice} from '@reduxjs/toolkit'
 
 export default createSlice({
     name:'cart',
-    initialState:[
-       
-    ]
+    initialState:{
+        listItem:[],
+        quantities:0,
+        coupon:'',
+        nameCustomer:'',
+        address: '',
+        phone:'',
+        email:'',
+        priceCoupon:0,
+        priceTotal:0,
+        priceAll:0,
+        note:'',
+        payments:'Tiền mặt',
+    }
     ,
     reducers:{
-        addItem:(state,action)=>{
-            state.push(action.payload);
-        },
-        deleteItem:(state,action)=>{
-            state.slice(action.payload,1);
-        },
-        updateItem:(state,action)=>{
-            state.slice(action.payload.index,1,action.payload.item);
-        },
         updateCart:(state,action)=>{
-            console.log('type',typeof(action.payload))
-            state = JSON.parse(action.payload);
+            
+            state.listItem = JSON.parse(action.payload);
+            
+            return state;
+        },
+        setQuantities:(state,action)=>{
+            state.quantities = action.payload;
+            return state;
+        },
+        setCoupon:(state,action)=>{
+            state.coupon = action.payload;
+            return state;
+        },
+        setNameCustomer:(state,action)=>{
+            state.nameCustomer = action.payload;
+            return state;
+        },
+        setAddress:(state,action)=>{
+            state.address = action.payload;
+            return state;
+        },
+        setPhone:(state,action)=>{
+            state.phone = action.payload;
+            return state;
+        },
+        setEmail:(state,action)=>{
+            state.email = action.payload;
+            return state;
+        },
+        setNote:(state,action)=>{
+            state.note = action.payload;
+            return state;
+        },
+        changePayments:(state,action)=>{
+            state.payments = action.payload;
             return state;
         }
     }
