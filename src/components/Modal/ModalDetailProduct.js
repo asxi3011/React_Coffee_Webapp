@@ -1,5 +1,5 @@
 import React,{ useState, useEffect, useLayoutEffect }  from "react";
-import { ToastContainer, toast } from 'react-toastify'
+
 import {Modal} from 'react-bootstrap'
 import {useDispatch,useSelector} from 'react-redux'
 
@@ -7,7 +7,7 @@ import ListSize from '../ListSize'
 
 import cartSlice from "../Cart/cartSlice";
 
-import {getCart,getQuantitiesCart} from '../../redux/selector'
+import {getCart} from '../../redux/selector'
 import { BsFillFileTextFill } from "react-icons/bs";
 import { FaPlus, FaMinus } from "react-icons/fa";
 

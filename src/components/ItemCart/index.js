@@ -1,6 +1,6 @@
 
 import React,{useState} from 'react';
-import ModalDetailProduct from '../ModalDetailProduct/index';
+import ModalDetailProduct from '../Modal/ModalDetailProduct';
 
 
 function ItemCart(props){

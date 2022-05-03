@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { Link } from "react-router-dom";
-import Skeleton, { SkeletonTheme }  from 'react-loading-skeleton'
+import Skeleton  from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 function CardProduct({product}) {
     const [loaded,setLoaded] = useState(false);
@@ -11,7 +11,7 @@ function CardProduct({product}) {
                     <Link to={`/product/${product.slug}/`} className="a-none text-dark">
                         <div className="">
                             <div>
-                            {loaded ? null :   <Skeleton height={219} with={219} />}
+                            {loaded ? null : <Skeleton height={219} with={219}></Skeleton>  }
                                 <img
                                     style={loaded ? {} : {display: 'none'}}
                                     className="img-product"

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Reply from './CheckOrder/Reply';
+import Reply from '../components/CheckOrder/Reply';
 
 
 
-function GetOder(){
+function CheckOrder(){
     const [id,setId]= useState("");
     const[datas,setData]=useState("")
     // const[trans,setTrans]=useState([])
@@ -12,8 +12,8 @@ function GetOder(){
         // e.preventDefault()
         fetch(`https://sever-coffeehouse.herokuapp.com/getOrder?id=${id}`)
         .then(res=>res.json())
-        .then(Order=>{  
-            setData(Order);
+        .then(order=>{  
+            setData(order);
         })  
     }
 
@@ -43,4 +43,4 @@ function GetOder(){
 }
 
     
-export default GetOder
+export default CheckOrder

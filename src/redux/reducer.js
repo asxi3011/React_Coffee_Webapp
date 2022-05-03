@@ -3,7 +3,7 @@ import {combineReducers}from 'redux'
 // import todosReducer from "../components/TodoList/TodosSlice";
 import categorySlice from "../components/Category/categorySlice"
 import categoriesReducer from "../components/ListCategory/categoriesSlice"
-import modalSlice from "../components/Loading/loadingSlice"              
+import modalSlice from "../components/Modal/modalSlice"              
 import newsSlice from '../components/News/newsSlice'
 
 import cartSlice from '../components/Cart/cartSlice'

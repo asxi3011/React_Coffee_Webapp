@@ -195,7 +195,14 @@
     height: 100%;
     border-radius: 8px;
 }
-
+.name {
+    padding-left: 200px;
+    padding-right: 200px;
+  }
+  .name2{
+    padding-left: 150px;
+    padding-right: 150px;
+  }
 .name-product {
     line-height: 28px;
     font-size: 1.0rem;
@@ -946,3 +953,144 @@ button.btn_action {
 }
 
     
+/* Responsive */
+
+.nav__mobile {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 320px;
+  max-width: 100%;
+  background-color: 100%;
+  z-index: 10;
+  border-radius: 6px;
+  padding: 20px;
+  background-color: rgb(133, 109, 31);
+  transform: translateX(100%);
+  transition: transform linear 0.2s;
+}
+
+.nav__mobile-list {
+  margin-top: 24px;
+  list-style: none;
+}
+
+.nav__mobile-link {
+  text-decoration: none;
+  color: #000;
+  display: block;
+  padding: 24px 0;
+  cursor: pointer;
+}
+
+
+.nav__input {
+  display: none;
+}
+
+.nav__input:checked~.nav__overlay {
+  display: block;
+}
+
+.nav__input:checked~.nav__mobile {
+  transform: translateX(0)
+}
+
+.nav__mobile-close {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  cursor: pointer;
+  font-size: 26px;
+}
+
+.icon-menu:hover,
+.nav__mobile-link:hover,
+.nav__mobile-close:hover {
+  opacity: 0.5;
+}
+
+.nav__input .close-icon {
+  font-size: 26px;
+  color: #000;
+
+}
+
+.div-icon {
+  display: none;
+}
+
+.tra-icon {
+  font-size: 20px;
+  color: #000;
+
+}
+
+.nav__overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  animation: fadeIn linear 0.3s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+.carousel.slide{
+  z-index: 1;
+}
+.header-web {
+  height: 70px;
+  width: 100%;
+  background-color: #d70019;
+  position: fixed;
+  z-index: 2 !important;
+}
+/* Mobile & Tablet */
+
+@media (max-width: 63.9375em) {
+  .button-block {
+    display: none !important;
+  }
+
+  .div-icon {
+    display: block;
+  }
+
+  .icon-menu {
+    display: block;
+    cursor: pointer;
+    font-size: 26px;
+  }
+
+  .border-giaohang {
+    display: none !important;
+  }
+  .title-category{
+    display: none !important;
+  }
+  .list-category {
+    display: none !important;
+  }
+
+  .pd-w-100 {
+    padding: 0 !important;
+  }
+  .name{
+    padding: 0 !important;
+  }
+  .name2{
+    padding:0 !important;
+  }
+}

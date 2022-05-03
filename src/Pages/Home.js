@@ -1,15 +1,14 @@
-import { Link } from "react-router-dom";
-import { React ,memo,useState,useEffect} from "react"
+
+import { React ,memo,useState} from "react"
+import { useSelector} from 'react-redux';
+import Slider from '../components/Partials/Slider'
+import ListCategory from '../components/ListCategory'
+import Loading from '../components/Partials/Loading'
+
+import ListProduct from "../components/ListProduct";
+import ListNews from '../components/ListNews'
+
 import {getNews,getStatusLoading,getProductsInTea,getProductsInCoffee,getProductsInHome,getProductsInCake,getProductsInFreeze } from "../redux/selector";
-import ListProduct from "./ListProduct/index";
-import { useSelector,useDispatch} from 'react-redux';
-import Slider from './Slider'
-import ListCategory from './ListCategory/index'
-import newsSlice from "./News/newsSlice";
-import Loading from './Loading'
-
-import ListNews from './ListNews/index'
-
 function Home() {
     
     const coffeeProduct = useSelector(getProductsInCoffee);
@@ -42,8 +41,11 @@ function Home() {
     return (
         <>
             <div className="pd-header">
-                <Slider/>
+              
                 <div className="container-fluid">
+                    <div className="pd-w-100">
+                    <Slider/>
+                    </div>
                     <div className="pd-w-100 section-Chapter">
                         <div className="preview-Menu">
                             <div className="text-center fs-3 mb-3 mt-3">
@@ -58,12 +60,22 @@ function Home() {
                         </div>
                         
                         {<ListProduct products={getList()} length={12} />}
-                    </div>
+                        <div className="text-center fs-3">
+                        <i className="fas fa-newspaper fs-4 color-primary" /> Tin tức
                 </div>
+                    
                 { <ListNews news={listNews}/> }
+                    </div>
+                    
+                </div>
+            
+             
+              
+        
 
             </div>
             <Loading status={loaded}/>
+            <iframe style={{width:'100%',height:'1000px',border: 'none', 'max-width': '100%'}} frameborder="0" allowfullscreen allow="xr-spatial-tracking" scrolling="no" src="https://kuula.co/share/collection/7v7sc?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1"></iframe>
         </>
         
     )

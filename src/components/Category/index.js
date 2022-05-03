@@ -4,7 +4,7 @@ import { React, memo,useState,useEffect} from "react"
 import {useDispatch,useSelector} from 'react-redux'
 import {fetchProductInCategoryRequest} from '../../redux/callApi'
 import categorySlice from "./categorySlice";
-import loadingSlice from "../modalSlice";
+import loadingSlice from "../Modal/modalSlice";
 import { getProductInCategory,getProductsInTea,getProductsInCoffee,getProductsInHome,getProductsInCake,getProductsInFreeze } from "../../redux/selector";
 
 function Category({category,checked,setChecked,index,showParams}) {

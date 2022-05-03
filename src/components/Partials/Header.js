@@ -1,9 +1,9 @@
-import { React, useState, memo } from "react"
+import { React, memo } from "react"
 import { Link } from "react-router-dom";
-import { Button, Modal, Container, Row, Col } from 'react-bootstrap';
+
 import QuantitiesCart from '../QuantitiesCart/index'
 import {useDispatch} from 'react-redux'
-import modalSlice from '../modalSlice'
+import modalSlice from '../Modal/modalSlice'
 function Header() {
    const dispatch = useDispatch();
     return (

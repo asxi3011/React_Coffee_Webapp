@@ -1,10 +1,10 @@
-import React,{useState,useEffect} from "react";
+import React from "react";
 import ItemCart from '../ItemCart/index'
 import { useSelector,useDispatch} from 'react-redux';
 
-import {getQuantitiesCart,getPriceCoupon,getPriceTotal,getPriceAll,getCoupon,getCart} from '../../redux/selector'
+import {getQuantitiesCart,getPriceCoupon,getPriceTotal,getCoupon,getCart} from '../../redux/selector'
 import cartSlice from "./cartSlice";
-import modalSlice from '../modalSlice'
+import modalSlice from '../Modal/modalSlice'
 
 export default function Voices (){
     const dispatch = useDispatch()

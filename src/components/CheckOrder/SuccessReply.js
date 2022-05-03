@@ -1,5 +1,9 @@
 import React from 'react'
 export default function SuccessReply({order}){
+    function convertDate(createdAt){
+        var date = new Date(createdAt)
+        return date.toLocaleString('en-GB', {day:'numeric', month: 'long', year:'numeric'}) + " "+ date.toLocaleTimeString('en-GB');
+    }
     return(
         <div className="row mt-3">
         <div className="d-flex justify-content-center my-5">
@@ -17,7 +21,9 @@ export default function SuccessReply({order}){
                                 {order.data.status}
                             </div>
                             <div className="my-2">
-                            Ngày: {Date(order.data.createdAt).toLocaleString("vi-VN")}
+                            Ngày: {
+                              convertDate(order.data.createdAt)
+                            }
                             </div>
                         </div>
                         <div>
@@ -48,13 +54,14 @@ export default function SuccessReply({order}){
                                 </tr>
                             </thead>
                             {order.cartProduct.map((od,index)=>
-                                  <tbody>
+                                  <tbody key={index}>
                                   <tr>
                                   <td className="">{index+1}</td>
-                                  <td className="">{od.name_product}</td>
-                                  <td className="">{od.quanityProduct}</td>
-                                  <td>{od.name_product}</td>
-                                  <td>{od.sizeName}(+{od.sizePrice.toLocaleString()})</td>
+                                  <td className="">{od.nameProduct}</td>
+                                  <td className="">{od.quantities}</td>
+                                  <td>{od.sizeNameSelected}(+{od.sizeValueSelected})</td>
+                                  <td>{od.priceStandard.toLocaleString()}</td>
+                                 
                                   <td>{od.note}</td>
                                   <td>{od.priceTotal.toLocaleString()}</td>
                                   </tr>

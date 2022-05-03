@@ -3,7 +3,7 @@ function NotFound(){
     return(
         <div className="container-fluid">
                     <div className="pd-w-100 section-Chapter">
-                        <div className="preview-News mt-5">
+                        <div className="preview-News mt-5 text-center">
                             <div className="row my-3">
                                 <div className="col-lg-12 col-md-4 col-sm-12 my-2">
 

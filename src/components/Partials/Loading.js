@@ -1,5 +1,5 @@
 import { React} from "react"
-import '../App.css';
+
 import { Spinner, Modal} from 'react-bootstrap';
 export default function Loading({status}) {
   

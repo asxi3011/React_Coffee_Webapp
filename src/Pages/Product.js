@@ -1,13 +1,13 @@
 
-import { Link,useParams} from "react-router-dom";
-import { React ,memo,useState,useEffect} from "react"
-import {getNews,getStatusLoading,getProductsInTea,getProductsInCoffee,getProductsInHome,getProductsInCake,getProductsInFreeze } from "../redux/selector";
-import ListProduct from "./ListProduct/index";
+import {useParams} from "react-router-dom";
+import { React ,useState} from "react"
+import {getStatusLoading,getProductsInTea,getProductsInCoffee,getProductsInHome,getProductsInCake,getProductsInFreeze } from "../redux/selector";
 import { useSelector,useDispatch} from 'react-redux';
-import Slider from './Slider'
-import ListCategory from './ListCategory/index'
-import newsSlice from "./News/newsSlice";
-import Loading from './Loading'
+import ListProduct from "../components/ListProduct";
+
+import ListCategory from '../components/ListCategory'
+
+import Loading from '../components/Partials/Loading'
 
 export default function PageProduct({nameSelected}){
     const dispatch = useDispatch();

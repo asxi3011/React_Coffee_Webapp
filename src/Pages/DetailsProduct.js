@@ -1,17 +1,14 @@
 import React,{ useState, useEffect }  from "react";
 import { ToastContainer, toast } from 'react-toastify'
-
 import {useDispatch} from 'react-redux'
-import {fetchDetailsProductRequest} from '../../redux/callApi'
-import ListSize from '../ListSize'
-
-import cartSlice from "../Cart/cartSlice";
 import { BsFillFileTextFill } from "react-icons/bs";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-
 import 'react-toastify/dist/ReactToastify.css';
 
+import ListSize from '../components/ListSize'
+import cartSlice from "../components/Cart/cartSlice";
+import {fetchDetailsProductRequest} from '../redux/callApi'
 const DetailProduct = () => {
     const dispatch = useDispatch();
     let customToast = () =>

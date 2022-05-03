@@ -1,10 +1,10 @@
-import React,{useState,useEffect} from "react";
+import React from "react";
 
 import { useSelector,useDispatch} from 'react-redux';
 
 import {getName,getEmail,getPhone,getAddress,getNote} from '../../redux/selector'
 import cartSlice from "./cartSlice";
-import modalSlice from '../modalSlice'
+
 import Payments from "./Payments";
 export default function Info(){
     const dispatch = useDispatch()
@@ -14,7 +14,7 @@ export default function Info(){
   const address= useSelector(getAddress);
   const note = useSelector(getNote);
     return(
-        <div className="col-6">
+        <div className="col-lg-6 col-md-12">
         <div className="pd-12">
         <div className="d-flex align-items-center py-3 header">
             <span className="fw-bold fs-5">

@@ -10,11 +10,7 @@ function ListNews({news,length}) {
     const checkContinues = ()=> news.length > length ? true : false;
     return (
         <>
-            <div className="container-fluid pd-header">
-                <div className="pd-w-100 section-Chapter">
-                    <div className="text-center fs-3">
-                        <i className="fas fa-newspaper fs-4 color-primary" /> Tin tức
-                    </div>
+        
                     <div className="preview-News mt-5">
                         <div className="row my-3">
                             {limitNews.length>0 
@@ -31,8 +27,7 @@ function ListNews({news,length}) {
                     : ''
                     }
                     
-                </div>
-            </div>
+          
         </>
     )
 }

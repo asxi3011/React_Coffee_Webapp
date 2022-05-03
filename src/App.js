@@ -1,27 +1,32 @@
 
-import React, { useState, useEffect } from 'react';
+import React, {  useEffect } from 'react';
 import { Routes, Route } from "react-router-dom";
-import GlobalStyles from './components/GlobalStyles/index'
-import './components/css/Style.css'
-import './App.css'
+
+
 import 'bootstrap/dist/js/bootstrap.min.js'
-import { useSelector,useDispatch} from 'react-redux';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './Style.css'
+import './App.css'
+import { useDispatch} from 'react-redux';
 
-
+//Pages
+import Home from './Pages/Home';
+import DetailProduct from './Pages/DetailsProduct';
+import DetailNew from './Pages/DetailsNews'
+import PageProduct from './Pages/Product';
+import PageNews from './Pages/News'
+import PaymentOnline from './Pages/PaymentOnline'
+import Cart from './Pages/Cart'
+import CheckOrder from './Pages/checkOrder';
+//Components
 import cartSlice from './components/Cart/cartSlice';
-import Home from './components/Home';
-import { getStatusCoupon } from './redux/selector';
-import Header from './components/Header/index'
-import DetailProduct from './components/DetailProduct/index';
-import Cart from './components/Cart/index'
-import CheckOrder from './components/CheckOrder';
-import PageProduct from './components/PageProduct';
-import PageNews from './components/PageNews'
-import DetailNew from './components/DetailNew/index'
-import loadingSlice from "./components/modalSlice";
-import {fetchNewsRequest} from './redux/callApi'
 import newsSlice from "./components/News/newsSlice";
-import ModalCoupon from './components/ModalCoupon/index'
+import Header from './components/Partials/Header'
+import loadingSlice from "./components/Modal/modalSlice";
+import ModalCoupon from './components/Modal/ModalCoupon'
+//redux
+import { getStatusCoupon } from './redux/selector';
+import {fetchNewsRequest} from './redux/callApi'
 function App() {
   // const [loading,setLoading] = useState(true);
   // const [categorys, setCategorys] = useState([])
@@ -58,13 +63,14 @@ function App() {
   })
 
   return (
-    <GlobalStyles >
+  
       <div className="App">
         <Header/>
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/product/:slug" element={<DetailProduct/>} />
           <Route path="/cart" element={<Cart />}/>
+          <Route path="/paymentOnline" element={<PaymentOnline />} />
           <Route path="/checkOrder" element={<CheckOrder />} />
           <Route path="/:slug" element={<PageProduct />} />
           <Route path="/news" element={<PageNews />} />
@@ -72,7 +78,7 @@ function App() {
         </Routes>
         <ModalCoupon />
       </div>
-    </GlobalStyles>
+ 
   );
 }
   {/* <Header localCount={localCount} setCoupon={setCoupon}/>

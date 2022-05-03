@@ -1,14 +1,13 @@
 
 import React from "react";
 import { useNavigate } from "react-router-dom"
-import { useState, useEffect } from 'react';
 import { useSelector,useDispatch} from 'react-redux';
 import axios from 'axios';
 import { io } from "socket.io-client";
-import Voices from './Voices'
-import Info from './Info'
-import cartSlice from '../Cart/cartSlice'
-import {getPriceCoupon,getPriceTotal,getPriceAll,getCoupon,getCart,getName,getEmail,getPhone,getAddress,getNote,getPayments} from '../../redux/selector'
+import Voices from '../components/Cart/Voices'
+import Info from '../components/Cart/Info'
+import cartSlice from '../components/Cart/cartSlice'
+import {getPriceCoupon,getPriceTotal,getPriceAll,getCoupon,getCart,getName,getEmail,getPhone,getAddress,getNote,getPayments} from '../redux/selector'
 function Cart(){
   
   let navigate = useNavigate();
@@ -32,8 +31,8 @@ function Cart(){
       );
   };
   function clearCart() {
-    sessionStorage.removeItem("arrayCart");
-    sessionStorage.removeItem("countQuanity");
+    localStorage.removeItem('arrayCart');
+    localStorage.removeItem('countQuanity');
 }
   const validateCheckEmpty = (value)=>{
       return value.trim() !== "";
@@ -42,22 +41,12 @@ function Cart(){
     return validateEmail(iemail) && validateCheckEmpty(iname) && validateCheckEmpty(iphone) && validateCheckEmpty(iadress);
   }
   const redirectOnline=()=>{
-    
     if(validateInput(name,address,phone,email)){
       localStorage.setItem('nameCus',name) 
       localStorage.setItem('emailCus',email) 
       localStorage.setItem('phoneCus',phone) 
       localStorage.setItem('addressCus',address) 
       localStorage.setItem('noteCus',note) 
-      if(payments==="VNPay"){
-        axios.post('https://sever-coffeehouse.herokuapp.com/create_payment_url', {
-            priceTotal:priceTotal,
-        })
-        .then(function (responseCode) {
-           console.log(responseCode)
-        })
-    }
-    else{
       axios.post('https://sever-coffeehouse.herokuapp.com/order', {
         noteOrder: note,
         hotenOrder: name,
@@ -71,35 +60,45 @@ function Cart(){
         priceAll : priceAll,
         listProductOrder: carts,
         payment: payments,
-    })
+      })
     .then(function (response) {
+        if(payments ==='VNPay'){
+            axios.post('https://sever-coffeehouse.herokuapp.com/create_payment_url', {
+              priceTotal:priceTotal,
+              orderId:response.data.idOrder
+          })
+          .then(function (responseCode) {
+              window.location.href= responseCode.data
+          })
+        }else{
+          var idOrder = response.data.idOrder;
+          const socket = io("https://sever-coffeehouse.herokuapp.com", { transports : ['websocket'] });
+          socket.emit("don-hang-moi", response.data);
+          axios.post('https://sever-coffeehouse.herokuapp.com/sendMail', {
+              mail: email,
+              address: address,
+              priceTotal: priceAll,
+              name: name,
+              idOrder: idOrder,
+          })
+          .then(function (responseMail) {
+          //  setLoading(false);
+          alert("Đặt hàng thành công ! Quý khách vui lòng kiểm tra email để biết được id đơn hàng và tra cứu thông tin !")
+           
+              dispatch(cartSlice.actions.updateCart([]));
+              navigate("/");
+  
+  
+          })
+        }
         clearCart();
-        var idOrder = response.data.idOrder;
-        const socket = io("https://sever-coffeehouse.herokuapp.com", { transports : ['websocket'] });
-        socket.emit("don-hang-moi", response.data);
-        axios.post('https://sever-coffeehouse.herokuapp.com/sendMail', {
-            mail: email,
-            address: address,
-            priceTotal: priceAll,
-            name: name,
-            idOrder: idOrder,
-        })
-        .then(function (responseMail) {
-        //  setLoading(false);
-        alert("Đặt hàng thành công ! Quý khách vui lòng kiểm tra email để biết được id đơn hàng và tra cứu thông tin !")
-            localStorage.removeItem('arrayCart');
-            localStorage.removeItem('countQuanity');
-            dispatch(cartSlice.actions.updateCart([]));
-            navigate("/");
-
-
-        })
+      
     
     })
     .catch(function (error) {
         console.log(error);
     });
-    }
+   
    
     }
     else{
@@ -123,7 +122,7 @@ function Cart(){
           </div>
               <div className="row my-5">
                 <Info/>
-                <div className="col-6">
+                <div className="col-lg-6 col-md-12">
                   
                     <div className="bd-cart">
       <div>
