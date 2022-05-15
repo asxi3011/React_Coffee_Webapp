@@ -49,7 +49,7 @@ const DetailProduct = () => {
             setInfo(res);
             setChecked({ name: res.Size[0].name, value: res.Size[0].value })
         })
-    }, []) // Lấy dữ liệu từ API
+    },[slug]) // Lấy dữ liệu từ API
     const handleAddCart = () => {
         console.log(777);
         const cart = JSON.parse(localStorage.getItem('arrayCart')) || [];

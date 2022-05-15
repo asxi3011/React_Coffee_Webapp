@@ -9,6 +9,10 @@
     position: fixed;
     z-index: 2 !important;
 }
+.mic-recording{
+    animation : micOn 0.7s infinite;
+    background-color: #d70019 !important;
+}
 .carousel.slide{
     z-index: 1;
 }
@@ -58,7 +62,15 @@
     background-color: white;
     min-width: 120%;
 }
-
+.rad-12{
+    border-radius: 12px;
+}
+.rad-24{
+    border-radius: 24px;
+}
+.rad-36{
+    border-radius: 36px;
+}
 .pd-area-header {
     padding: 4px 16px;
 }
@@ -128,7 +140,11 @@
     overflow: hidden;
     white-space: nowrap;
 }
-
+.text-one-line {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
 .pd-header {
     padding-top: 80px;
 }
@@ -837,7 +853,22 @@ body {
     width: 40px;
     height: 40px;
 }
-
+.square-30{
+    width: 30px;
+    height: 30px
+}
+.square-40{
+    width: 40px;
+    height: 40px
+}
+.square-80{
+    width: 80px;
+    height: 80px;
+}
+.square-120{
+    width:120px;
+    height: 120px;
+}
 .btn-circle-transperant {
     border: 1px solid #acacac;
     padding: 2px;
@@ -939,7 +970,40 @@ button.btn_action {
     background: #f5f3f35c;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
-
+.pos-rela{
+    position: relative;
+  
+}
+.search-inline{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 12px;
+    z-index:2;
+}
+.micro-inline{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 12px;
+    z-index:3;
+}
+.micro-inline:hover{
+    cursor: pointer;
+}
+.result-hint{
+    background-color: #eee ;
+    position: absolute;
+    bottom: 0;
+    transform:translateY(100%);
+    width:100%;
+    z-index: 3;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+.item-search:hover{
+    background-color: #edd9bdd5
+}
 @-webkit-keyframes slide {
     100% {
         right: 20px;
@@ -952,6 +1016,13 @@ button.btn_action {
     }
 }
 
+@keyframes micOn {
+    0%    { opacity: 1; }
+  20%   { opacity: 0.5; }
+  50% { opacity: 0.1; }
+  80%   { opacity: 0.5; }
+  100%  { opacity: 1; }
+}
     
 /* Responsive */
 

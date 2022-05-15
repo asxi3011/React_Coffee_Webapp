@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import QuantitiesCart from '../QuantitiesCart/index'
 import {useDispatch} from 'react-redux'
 import modalSlice from '../Modal/modalSlice'
+import Search from '../Search'
 function Header() {
    const dispatch = useDispatch();
     return (
@@ -104,9 +105,20 @@ function Header() {
 
                         </ul>
                     </nav>
-
+                    <div className="d-flex align-items-center justify-content-end gap-3">
+                    {/* input seach */}
+                    <Search/>
+                    {/* profile */}
                     <div className=" ">
-                        <QuantitiesCart/>
+
+                    <Link to="/profile" className="btn-40 d-flex rounded-circle btn-cart" style={{backgroundColor:'#eee'}}>
+                    <i className="fa-regular fa-user color-primary m-auto fs-4"></i>
+                    
+                    
+                    </Link>
+
+                    </div>
+                    <QuantitiesCart/>
                     </div>
                     <label htmlFor="nav-mobile-input" className="nav__overlay"></label>
 

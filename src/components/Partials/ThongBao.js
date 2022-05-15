@@ -1,5 +1,4 @@
 import { React, useState} from "react"
-import '../App.css';
 import { Link } from "react-router-dom";
 import { Button, Modal, Container, Row, Col } from 'react-bootstrap';
 export default function ThongBao() {

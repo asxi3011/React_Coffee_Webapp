@@ -21,7 +21,6 @@ function ModalDetailProduct(props) {
   const [checked, setChecked] = useState({name:props.product.sizeNameSelected,value:props.product.sizeValueSelected});
   const [notes, setNote] = useState(props.product.note)
   const [carts, setCarts] = useState(props.product)
-  console.log(props.product.quantities);
 const getCountArray=(array)=>{
     return array.reduce((preCount,item)=>preCount+item.quantities,0);
 }
@@ -61,10 +60,10 @@ const onClickSessions = () => {
            return ele
        })
        arrayCP.splice(props.index,1)
-       console.log('a123rra',arrayCP);
+      
     }else{
         arrayCP[props.index] = carts;
-        console.log('mangmoine',arrT);
+        
     }
     const quantitiesCart = getCountArray(arrayCP);
     localStorage.setItem("arrayCart",JSON.stringify(arrayCP));

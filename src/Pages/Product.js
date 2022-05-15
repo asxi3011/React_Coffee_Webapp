@@ -1,46 +1,31 @@
 
 import {useParams} from "react-router-dom";
-import { React ,useState} from "react"
-import {getStatusLoading,getProductsInTea,getProductsInCoffee,getProductsInHome,getProductsInCake,getProductsInFreeze } from "../redux/selector";
+import { React ,useState,useEffect} from "react"
+import {getNews,getStatusLoading,getProductInCategory,getCategoryChecked} from "../redux/selector";
+
 import { useSelector,useDispatch} from 'react-redux';
 import ListProduct from "../components/ListProduct";
 
 import ListCategory from '../components/ListCategory'
 
 import Loading from '../components/Partials/Loading'
+import NotFound from "../components/Partials/NotFound";
 
 export default function PageProduct({nameSelected}){
     const dispatch = useDispatch();
     const {slug} = useParams();
-    console.log(slug);
-    const coffeeProduct = useSelector(getProductsInCoffee);
-    const teaProduct = useSelector(getProductsInTea);
-    const homeProduct = useSelector(getProductsInHome);
-    const cakeProduct = useSelector(getProductsInCake);
-    const freezeProduct = useSelector(getProductsInFreeze);
-    const [checked,setChecked] = useState(slug);
-    const loaded = useSelector(getStatusLoading);
-    function getList(){
-        if(coffeeProduct.checked){
-            return {name:coffeeProduct.name,list:coffeeProduct.list,slug:coffeeProduct.slug};
-        }
-        if(teaProduct.checked){
-            return {name:teaProduct.name,list:teaProduct.list,slug:teaProduct.slug};
-        }
-        if(homeProduct.checked){
-            return {name:homeProduct.name,list:homeProduct.list,slug:homeProduct.slug};
-        }
-        if(cakeProduct.checked){
-            return {name:cakeProduct.name,list:cakeProduct.list,slug:cakeProduct.slug};
-        }
-        if(freezeProduct.checked){
-            return {name:freezeProduct.name,list:freezeProduct.list,slug:freezeProduct.slug};
-        }
-        return {name:'',list:[]};
-    }
- 
-  
+    const products = useSelector(getProductInCategory)
+    const checkedName = useSelector(getCategoryChecked);
+    const [listProduct,setListProduct] = useState();
+    useEffect(() => {
+        const list = products.find(ele=>{
+            return ele.slug===slug
+        })
+        console.log(list);
+        setListProduct(list)
+    },[slug])
     return(
+        listProduct ?
         <>
         <div className="pd-header">
             <div className="container-fluid">
@@ -53,16 +38,17 @@ export default function PageProduct({nameSelected}){
                             Sản phẩm từ Nhà
                         </div>
                      
-                        <ListCategory checked={checked} setChecked={setChecked} showParams={true}/>
+                        <ListCategory checkedName={checkedName} showParams={true}/>
                       
                     </div>
                     
-                    {<ListProduct products={getList()}/>}
+                    {<ListProduct products={listProduct}/>}
                 </div>
             </div>
 
         </div>
-        <Loading status={loaded}/>
-    </>
+       
+        </>
+        : <NotFound/>
     )
 }

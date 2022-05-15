@@ -63,7 +63,7 @@ export default function SuccessReply({order}){
                                   <td>{od.priceStandard.toLocaleString()}</td>
                                  
                                   <td>{od.note}</td>
-                                  <td>{od.priceTotal.toLocaleString()}</td>
+                                  <td>{od.priceAll}</td>
                                   </tr>
   
                               </tbody> 

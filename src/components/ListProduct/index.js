@@ -1,7 +1,7 @@
 import { Link} from "react-router-dom";
-import Skeleton, { SkeletonTheme }  from 'react-loading-skeleton'
+
 import 'react-loading-skeleton/dist/skeleton.css'
-import {useState,useCallback} from 'react'
+
 import CardProduct from "../Product";
 function ListProduct({products,length}){
     const list = products.list;
@@ -26,7 +26,6 @@ function ListProduct({products,length}){
         {   
             checkContinues() ?
             <div className="text-center">
-                {console.log('productsne',products)}
             <Link to={`/${slug}`} className="a-none color-primary fs-6">
                 Xem tất cả <i className="fas fa-arrow-right" />
             </Link>

@@ -7,6 +7,8 @@ import { io } from "socket.io-client";
 import Voices from '../components/Cart/Voices'
 import Info from '../components/Cart/Info'
 import cartSlice from '../components/Cart/cartSlice'
+import ThongBao from '../components/Partials/ThongBao'
+import modalSlice from '../components/Modal/modalSlice'
 import {getPriceCoupon,getPriceTotal,getPriceAll,getCoupon,getCart,getName,getEmail,getPhone,getAddress,getNote,getPayments} from '../redux/selector'
 function Cart(){
   
@@ -42,6 +44,7 @@ function Cart(){
   }
   const redirectOnline=()=>{
     if(validateInput(name,address,phone,email)){
+      dispatch(modalSlice.actions.toggleLoading())
       localStorage.setItem('nameCus',name) 
       localStorage.setItem('emailCus',email) 
       localStorage.setItem('phoneCus',phone) 
@@ -64,10 +67,11 @@ function Cart(){
     .then(function (response) {
         if(payments ==='VNPay'){
             axios.post('https://sever-coffeehouse.herokuapp.com/create_payment_url', {
-              priceTotal:priceTotal,
+              priceTotal:priceAll,
               orderId:response.data.idOrder
           })
           .then(function (responseCode) {
+              dispatch(modalSlice.actions.toggleLoading())
               window.location.href= responseCode.data
           })
         }else{
@@ -83,9 +87,9 @@ function Cart(){
           })
           .then(function (responseMail) {
           //  setLoading(false);
-          alert("Đặt hàng thành công ! Quý khách vui lòng kiểm tra email để biết được id đơn hàng và tra cứu thông tin !")
-           
-              dispatch(cartSlice.actions.updateCart([]));
+            dispatch(modalSlice.actions.toggleLoading())
+            alert("Đặt hàng thành công ! Quý khách vui lòng kiểm tra email để biết được id đơn hàng và tra cứu thông tin !")
+              dispatch(cartSlice.actions.updateCart('[]'));
               navigate("/");
   
   
@@ -103,14 +107,15 @@ function Cart(){
     }
     else{
     
-    alert("Vui long nhập email và thông tin không được để trống")
+      alert("Vui long nhập email và thông tin không được để trống")
     }
     
   }
  
 
   
-  return (  
+  return (
+    carts.length>0 ?
     <div className="pd-header">
       <div className="container">
         <div className="name2">
@@ -153,6 +158,8 @@ function Cart(){
           </div>
          
     </div>
+    :
+    <ThongBao/>
   )
 }
 

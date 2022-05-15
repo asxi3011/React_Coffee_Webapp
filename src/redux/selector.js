@@ -1,12 +1,15 @@
 import {createSelector} from '@reduxjs/toolkit';
 export const getCategories = (state) => state.categories;
-export const getProductsInCoffee = (state)=> state.category.coffee;
-
-export const getProductsInTea = (state)=> state.category.tea;
-export const getProductsInHome = (state)=> state.category.home;
-export const getProductsInCake = (state)=> state.category.cake;
-export const getProductsInFreeze = (state)=> state.category.freeze;
-export const getProductInCategory = (state)=>state.category;
+export const getProducts = (state) => state.product
+export const getProductInCategory = (state) => state.category.products;
+export const getCategoryChecked =  (state) => state.category.checked;
+export const getSearchValue = (state) => state.search
+export const getListChecked = createSelector(getCategoryChecked,getProductInCategory,(checked,products)=>{
+    return products.find(product=>product.name===checked)
+})
+export const getListRemaining = createSelector(getSearchValue,getProducts,(searchValue,products)=>{
+    return products.filter((product)=>product.nameProduct.includes(searchValue))
+})
 
 export const getStatusLoading = (state)=>state.modal.loading;
 export const getStatusCoupon = (state)=>state.modal.coupon;

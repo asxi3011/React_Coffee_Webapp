@@ -1,5 +1,5 @@
 
-import React, {  useEffect } from 'react';
+import React, {  useEffect, useState } from 'react';
 import { Routes, Route } from "react-router-dom";
 
 
@@ -7,7 +7,7 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './Style.css'
 import './App.css'
-import { useDispatch} from 'react-redux';
+import { useDispatch,useSelector} from 'react-redux';
 
 //Pages
 import Home from './Pages/Home';
@@ -18,15 +18,23 @@ import PageNews from './Pages/News'
 import PaymentOnline from './Pages/PaymentOnline'
 import Cart from './Pages/Cart'
 import CheckOrder from './Pages/checkOrder';
+import Search from './Pages/Search'
 //Components
 import cartSlice from './components/Cart/cartSlice';
 import newsSlice from "./components/News/newsSlice";
 import Header from './components/Partials/Header'
-import loadingSlice from "./components/Modal/modalSlice";
+import modalSlice from "./components/Modal/modalSlice";
 import ModalCoupon from './components/Modal/ModalCoupon'
+import Loading from './components/Partials/Loading'
 //redux
-import { getStatusCoupon } from './redux/selector';
+import { getStatusCoupon,getStatusLoading} from './redux/selector';
 import {fetchNewsRequest} from './redux/callApi'
+import {fetchCategoryRequest} from "./redux/callApi"
+import categoriesSlice from "./components/ListCategory/categoriesSlice";
+import productSlice from "./components/Product/productSlice";
+import {fetchProductsRequest} from './redux/callApi'
+import categorySlice from './components/Category/categorySlice';
+import NotFound from './components/Partials/NotFound';
 function App() {
   // const [loading,setLoading] = useState(true);
   // const [categorys, setCategorys] = useState([])
@@ -36,8 +44,10 @@ function App() {
   // const [localCount,setLocalCount] = useState(JSON.parse(localStorage.getItem('countQuanity')) || 0);
 
   const dispatch = useDispatch();
-    useEffect(() => {
-      dispatch(loadingSlice.actions.toggleLoading())
+  const loaded = useSelector(getStatusLoading);
+  const [loading,setLoading] = useState(true);
+  useEffect(() => {
+      dispatch(modalSlice.actions.toggleLoading())
       const quantities= localStorage.getItem('countQuanity') || 0
       const cart= localStorage.getItem('arrayCart') || []
       const nameCus = localStorage.getItem('nameCus')  || ''
@@ -54,16 +64,27 @@ function App() {
       dispatch(cartSlice.actions.setPhone(phoneCus))
       dispatch(cartSlice.actions.setAddress(addressCus))
       dispatch(cartSlice.actions.setNote(noteCus))
-
       const listNews = fetchNewsRequest();
-      listNews.then(data=>{
-      dispatch(newsSlice.actions.fetchNewsRequest(data))
-      dispatch(loadingSlice.actions.toggleLoading())
-    }, [])
-  })
+      const listCategory = fetchCategoryRequest();
+      const listProduct = fetchProductsRequest();
+      const loadData = Promise.all([listNews,listCategory,listProduct])
+      loadData.then(([news,categorys,products])=>{
+        const mucsanpham = categorys.map(cate=>{
+          const namecate= cate.nameCategory;
+          return {name:namecate,list:products.filter(product=>cate._id===product.idCategory),slug:cate.slug}
+        })
+        dispatch(categorySlice.actions.fetchProductInCategory(mucsanpham))
+        dispatch(categoriesSlice.actions.fetchCategory(categorys)); 
+        dispatch(productSlice.actions.fetchProductsRequest(products));
+        dispatch(newsSlice.actions.fetchNewsRequest(news))
+        console.log('đã load data')
+        dispatch(modalSlice.actions.toggleLoading())
+        setLoading(false);
+       })
+  },[])
 
   return (
-  
+    !loading ?
       <div className="App">
         <Header/>
         <Routes>
@@ -75,10 +96,13 @@ function App() {
           <Route path="/:slug" element={<PageProduct />} />
           <Route path="/news" element={<PageNews />} />
           <Route path="/news/:slug" element={<DetailNew />} />
+          <Route path="/search" element={<Search />} />
+     
         </Routes>
         <ModalCoupon />
+        <Loading status={loaded}/>
       </div>
- 
+    : ''
   );
 }
   {/* <Header localCount={localCount} setCoupon={setCoupon}/>

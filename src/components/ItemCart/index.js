@@ -10,7 +10,6 @@ function ItemCart(props){
     return(
         show ?
             <div className="col-12 ItemCart">
-                {console.log('đã render Item')}
                   <div className="line-product d-flex align-items-center gap-2 my-2">
                     <div className="btn btn-edit-product-cart" onClick={setModalShow}>
                       <i className="fas fa-pen color-primary" />

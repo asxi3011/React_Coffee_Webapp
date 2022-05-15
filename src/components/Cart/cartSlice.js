@@ -5,6 +5,7 @@ export default createSlice({
     initialState:{
         listItem:[],
         quantities:0,
+        priceAllProduct:0,
         coupon:'',
         nameCustomer:'',
         address: '',
