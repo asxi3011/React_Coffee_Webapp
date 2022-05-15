@@ -35,6 +35,7 @@ import productSlice from "./components/Product/productSlice";
 import {fetchProductsRequest} from './redux/callApi'
 import categorySlice from './components/Category/categorySlice';
 import NotFound from './components/Partials/NotFound';
+import Waitting from './components/Partials/Waitting'
 function App() {
   // const [loading,setLoading] = useState(true);
   // const [categorys, setCategorys] = useState([])
@@ -77,7 +78,7 @@ function App() {
         dispatch(categoriesSlice.actions.fetchCategory(categorys)); 
         dispatch(productSlice.actions.fetchProductsRequest(products));
         dispatch(newsSlice.actions.fetchNewsRequest(news))
-        console.log('đã load data')
+        console.log('đã load data 123')
         dispatch(modalSlice.actions.toggleLoading())
         setLoading(false);
        })
@@ -102,7 +103,7 @@ function App() {
         <ModalCoupon />
         <Loading status={loaded}/>
       </div>
-    : ''
+    :  <Waitting/>
   );
 }
   {/* <Header localCount={localCount} setCoupon={setCoupon}/>

@@ -13,6 +13,7 @@ function Home() {
     const listNews = useSelector(getNews);
     const products = useSelector(getListChecked)
     const checkedName = useSelector(getCategoryChecked);
+    console.log("Load Home");
     return (
         products.list.length> 0 ?
         <>

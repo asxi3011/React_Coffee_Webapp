@@ -1004,6 +1004,10 @@ button.btn_action {
 .item-search:hover{
     background-color: #edd9bdd5
 }
+.App{
+    animation: showApp 1.3s ease-in !important;
+    position: relative;
+}
 @-webkit-keyframes slide {
     100% {
         right: 20px;
@@ -1023,7 +1027,13 @@ button.btn_action {
   80%   { opacity: 0.5; }
   100%  { opacity: 1; }
 }
-    
+
+@keyframes showApp{
+    0% { opacity: 0}
+    100% { opacity: 1; }
+    from {top:100vh}
+    to {top:0}
+}
 /* Responsive */
 
 .nav__mobile {
