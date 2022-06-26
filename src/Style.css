@@ -13,6 +13,7 @@
     animation : micOn 0.7s infinite;
     background-color: #d70019 !important;
 }
+
 .carousel.slide{
     z-index: 1;
 }
@@ -20,11 +21,47 @@
     padding-top: 12px;
     padding-bottom: 12px;
 }
-
+.gap-60{
+    gap:60px;
+}
+.gap-120{
+    gap:108px;
+}
+.pd-12{
+    padding: 12px;
+}
+.pd-60{
+    padding: 60px;
+}
+.pd-y-120{
+    padding: 0px 120px;
+}
+.pd-y-220{
+    padding: 0px 220px;
+}
+.pd-50x{
+    padding: 0 50%;
+}
+.rad-12{
+    border-radius:12px;
+}
+.half-down-rad-12{
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
 .header-height {
     height: 80px;
 }
-
+.note-member-card{    
+    padding:20px;
+    display:block;
+    transform: translateY(-5%);
+}
+.img-background-card{
+    position: absolute;
+    z-index: 0;
+    right:0
+}
 .item-header-height {
     height: 40px;
 }
@@ -197,8 +234,86 @@
     padding: 12px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     border-radius: 8px;
+    width:100%;
 }
+.border-info-left {
+    padding: 12px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 8px;
+    width: 360px;
+    margin: auto;
+}
+.options-active{
+    color:#fa8c16;
+}
+.half-down-border-product{
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 5px 5px 0px;
+}
+.member-card{
+    position: relative;
+    width:100%;
+    border-radius: 8px;
+    padding:6px;
+    display:block;
+}
+.options-user{
+    padding:8px 12px;
+    border-bottom: 1px solid #ccc;
+}
+.member-card-gold{
+    background:linear-gradient(to top, #bd8f2b , #d2ca73,#B38728);
+    height:180px;
+}
+.member-card-standard{
+    background: linear-gradient(rgb(255, 149, 34) 0%, rgb(218, 84, 9) 50%);
+    height:180px;
+}
+.member-card-diamond{
+    background: linear-gradient(to bottom, #8792a8, #000c40);
+    height:180px;
+}
+.card-info-idUser{
+    position: absolute;
+    bottom:52px;
+    left:20px;
+    letter-spacing: 5px;
+}
+.text-metal-dark{
+    font-family: 'Bree Serif', serif;
+    color: #494949;
+    font-weight: 900;
+}
+.text-metal-gold{
+    font-family: 'Bree Serif', serif;
+    background: linear-gradient(to bottom, #cfc09f 22%,#634f2c 24%, #cfc09f 26%, #cfc09f 27%,#ffecb3 40%,#3a2c0f 78%); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #fff;
+    font-weight: 900;
+}
+.text-metal-silver{
+    font-family: 'Bree Serif', serif;
+    background: linear-gradient(to bottom, #ede8dc 22%,#b3b3b1 24%, #dcd7cc 26%, #d5d2ca 27%,#c7c7be 40%,#8c8b8a 78%); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #fff;
+    font-weight: 900;
+}
+.card-info-rank{
+    position: absolute;
+    bottom: 12px;
+    right: 20px;
+    letter-spacing:2px
+}
+.card-info-name{
+    position: absolute;
+    bottom: 12px;
+    left: 20px;
+    font-family: 'Bree Serif', serif;
+    letter-spacing:1px
 
+
+}
 .border-news {
     padding: 12px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -291,11 +406,15 @@
 }
 
 .line_bottom {
-    width: 60px;
+    position: absolute;
+    bottom: -8px;
+    width: 50%;
     height: 2px;
     background-color: #fb8f19;
 }
-
+.pos-relative{
+    position: relative;
+}
 .bg-getAll {
     background-color: #fb8f19;
     padding: 8px;
@@ -1173,5 +1292,8 @@ button.btn_action {
   }
   .name2{
     padding:0 !important;
+  }
+  .pd-y-220{
+      padding: 20px !important;
   }
 }

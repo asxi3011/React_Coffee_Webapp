@@ -2,12 +2,13 @@
 import React, {  useEffect, useState } from 'react';
 import { Routes, Route } from "react-router-dom";
 
-
+import 'antd/dist/antd.css';
 import 'bootstrap/dist/js/bootstrap.min.js'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './Style.css'
 import './App.css'
 import { useDispatch,useSelector} from 'react-redux';
+//Firebase
 
 //Pages
 import Home from './Pages/Home';
@@ -19,6 +20,8 @@ import PaymentOnline from './Pages/PaymentOnline'
 import Cart from './Pages/Cart'
 import CheckOrder from './Pages/checkOrder';
 import Search from './Pages/Search'
+import PageProfile from './Pages/PageProfile';
+import Profile from './Pages/Profile';
 //Components
 import cartSlice from './components/Cart/cartSlice';
 import newsSlice from "./components/News/newsSlice";
@@ -28,14 +31,14 @@ import ModalCoupon from './components/Modal/ModalCoupon'
 import Loading from './components/Partials/Loading'
 //redux
 import { getStatusCoupon,getStatusLoading} from './redux/selector';
-import {fetchNewsRequest} from './redux/callApi'
-import {fetchCategoryRequest} from "./redux/callApi"
+import {fetchNewsRequest,fetchTokenAhamove,fetchCategoryRequest,fetchProductsRequest} from './redux/callApi'
 import categoriesSlice from "./components/ListCategory/categoriesSlice";
 import productSlice from "./components/Product/productSlice";
-import {fetchProductsRequest} from './redux/callApi'
+import tokenSlice from "./components/Token/tokenSlice"
 import categorySlice from './components/Category/categorySlice';
 import NotFound from './components/Partials/NotFound';
 import Waitting from './components/Partials/Waitting'
+import AuthProvider from './components/Context/AuthProvider'
 function App() {
   // const [loading,setLoading] = useState(true);
   // const [categorys, setCategorys] = useState([])
@@ -43,7 +46,6 @@ function App() {
   // const [products, setProducts] = useState([]);
   // const [coupon,setCoupon] = useState(localStorage.getItem('coupon'));
   // const [localCount,setLocalCount] = useState(JSON.parse(localStorage.getItem('countQuanity')) || 0);
-
   const dispatch = useDispatch();
   const loaded = useSelector(getStatusLoading);
   const [loading,setLoading] = useState(true);
@@ -56,10 +58,18 @@ function App() {
       const emailCus = localStorage.getItem('emailCus') || ''
       const addressCus = localStorage.getItem('addressCus') || ''
       const noteCus = localStorage.getItem('noteCus') || ''
+      const token = localStorage.getItem('tokenAhamove')
       if(cart.length>0){
         dispatch(cartSlice.actions.updateCart(cart))
         dispatch(cartSlice.actions.setQuantities(quantities))
       }
+      if(!token){
+        const getToken =  fetchTokenAhamove();
+        getToken.then(result=>{
+          localStorage.setItem('tokenAhamove',result.data.token);
+        })
+      }
+      dispatch(tokenSlice.actions.fetchTokenAhamove(token));
       dispatch(cartSlice.actions.setEmail(emailCus))
       dispatch(cartSlice.actions.setNameCustomer(nameCus))
       dispatch(cartSlice.actions.setPhone(phoneCus))
@@ -86,23 +96,27 @@ function App() {
 
   return (
     !loading ?
-      <div className="App">
-        <Header/>
-        <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="/product/:slug" element={<DetailProduct/>} />
-          <Route path="/cart" element={<Cart />}/>
-          <Route path="/paymentOnline" element={<PaymentOnline />} />
-          <Route path="/checkOrder" element={<CheckOrder />} />
-          <Route path="/:slug" element={<PageProduct />} />
-          <Route path="/news" element={<PageNews />} />
-          <Route path="/news/:slug" element={<DetailNew />} />
-          <Route path="/search" element={<Search />} />
      
-        </Routes>
-        <ModalCoupon />
-        <Loading status={loaded}/>
-      </div>
+        <div className="App">
+          <Header/>
+          <Routes>
+            <Route path="/" element={<Home/>} />
+            {/* <Route path="/product/:slug" element={<DetailProduct/>} /> */}
+            <Route path="/login" element={<PageProfile />}/>
+            <Route path="/profile" element={<Profile/>}/>
+            <Route path="/cart" element={<Cart />}/>
+            <Route path="/paymentOnline" element={<PaymentOnline />} />
+            <Route path="/checkOrder" element={<CheckOrder />} />
+            <Route path="/news" element={<PageNews />} />
+            <Route path="/news/:slug" element={<DetailNew />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/:slug" element={<PageProduct />} />
+      
+          </Routes>
+          <ModalCoupon />
+          <Loading status={loaded}/>
+        </div>
+   
     :  <Waitting/>
   );
 }

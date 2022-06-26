@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
+import { setPersistence } from 'firebase/auth';
 
 export default createSlice({
     name:'cart',
@@ -14,6 +15,7 @@ export default createSlice({
         priceCoupon:0,
         priceTotal:0,
         priceAll:0,
+        priceShip:0,
         note:'',
         payments:'Tiền mặt',
     }
@@ -55,6 +57,10 @@ export default createSlice({
         },
         changePayments:(state,action)=>{
             state.payments = action.payload;
+            return state;
+        },
+        changePriceShip:(state,actions)=>{
+            state.priceShip = actions.payload;
             return state;
         }
     }

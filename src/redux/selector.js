@@ -22,7 +22,8 @@ export const getPhone = (state)=>state.cart.phone;
 export const getAddress = (state)=>state.cart.address;
 export const getNote = (state)=>state.cart.note;
 export const getPayments = (state)=>state.cart.payments;
-
+export const getTokenAhamove =(state)=>state.token.tokenAhamove;
+export const getPriceShip = (state)=>state.cart.priceShip;
 export const getQuantitiesCart = createSelector(
     getCart,
     (carts)=>carts.reduce((pre,item)=>pre+item.quantities,0)
@@ -50,7 +51,8 @@ export const getPriceCoupon = createSelector(
 export const getPriceAll = createSelector(
     getPriceTotal,
     getPriceCoupon,
-    (total,coupon)=>{
-        return total - coupon + 30000;
+    getPriceShip,
+    (total,coupon,ship)=>{
+        return total - coupon + ship;
     }
 )

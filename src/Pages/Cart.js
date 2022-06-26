@@ -9,7 +9,8 @@ import Info from '../components/Cart/Info'
 import cartSlice from '../components/Cart/cartSlice'
 import ThongBao from '../components/Partials/ThongBao'
 import modalSlice from '../components/Modal/modalSlice'
-import {getPriceCoupon,getPriceTotal,getPriceAll,getCoupon,getCart,getName,getEmail,getPhone,getAddress,getNote,getPayments} from '../redux/selector'
+import {createOrder} from '../redux/callApi'
+import {getTokenAhamove,getPriceCoupon,getPriceShip,getPriceTotal,getPriceAll,getCoupon,getCart,getName,getEmail,getPhone,getAddress,getNote,getPayments} from '../redux/selector'
 function Cart(){
   
   let navigate = useNavigate();
@@ -25,6 +26,9 @@ function Cart(){
   const priceAll = useSelector(getPriceAll);
   const carts = useSelector(getCart);
   const payments = useSelector(getPayments);
+  const priceShip = useSelector(getPriceShip);
+  const tokenAhamove = useSelector(getTokenAhamove);
+
   const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
@@ -56,7 +60,7 @@ function Cart(){
         emailOrder:email,
         sdtOrder: phone,
         addressOrder: address,
-        priceCharge: 30000,
+        priceCharge: priceShip,
         priceCoupon: priceCoupon,
         nameCoupon: coupon,
         priceTotal: priceTotal,
@@ -64,44 +68,48 @@ function Cart(){
         listProductOrder: carts,
         payment: payments,
       })
-    .then(function (response) {
-        if(payments ==='VNPay'){
-            axios.post('https://sever-coffeehouse.herokuapp.com/create_payment_url', {
-              priceTotal:priceAll,
-              orderId:response.data.idOrder
-          })
-          .then(function (responseCode) {
+      .then(function (response) {
+          if(payments ==='VNPay'){
+              axios.post('https://sever-coffeehouse.herokuapp.com/create_payment_url', {
+                priceTotal:priceAll,
+                orderId:response.data.idOrder
+            })
+            .then(function (responseCode) {
+                dispatch(modalSlice.actions.toggleLoading())
+                window.location.href= responseCode.data
+            })
+          }else{
+            var idOrder = response.data.idOrder;
+            const socket = io("https://sever-coffeehouse.herokuapp.com", { transports : ['websocket'] });
+            socket.emit("don-hang-moi", response.data);
+            const order = createOrder(tokenAhamove,address,name,phone,note,carts)
+            order.then(order=>{
+                console.log('Xem chi tiết đơn hàng tại: ',order.data.shared_link);
+            })
+            axios.post('https://sever-coffeehouse.herokuapp.com/sendMail', {
+                mail: email,
+                address: address,
+                priceTotal: priceAll,
+                name: name,
+                idOrder: idOrder,
+            })
+            .then(function (responseMail) {
+            //  setLoading(false);
               dispatch(modalSlice.actions.toggleLoading())
-              window.location.href= responseCode.data
-          })
-        }else{
-          var idOrder = response.data.idOrder;
-          const socket = io("https://sever-coffeehouse.herokuapp.com", { transports : ['websocket'] });
-          socket.emit("don-hang-moi", response.data);
-          axios.post('https://sever-coffeehouse.herokuapp.com/sendMail', {
-              mail: email,
-              address: address,
-              priceTotal: priceAll,
-              name: name,
-              idOrder: idOrder,
-          })
-          .then(function (responseMail) {
-          //  setLoading(false);
-            dispatch(modalSlice.actions.toggleLoading())
-            alert("Đặt hàng thành công ! Quý khách vui lòng kiểm tra email để biết được id đơn hàng và tra cứu thông tin !")
-              dispatch(cartSlice.actions.updateCart('[]'));
-              navigate("/");
-  
-  
-          })
-        }
-        clearCart();
-      
+              alert("Đặt hàng thành công ! Quý khách vui lòng kiểm tra email để biết được id đơn hàng và tra cứu thông tin !")
+                dispatch(cartSlice.actions.updateCart('[]'));
+                navigate("/");
     
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
+    
+            })
+          }
+          clearCart();
+        
+      
+      })
+      .catch(function (error) {
+          console.log(error);
+      });
    
    
     }
@@ -142,7 +150,7 @@ function Cart(){
                               <div id="price_total_with_charge_show" className="fw-bold" >{priceAll.toLocaleString("vi-VN",{style:"currency", currency:"VND"})}</div>
                               <input id="price_total_with_charge" name="priceTotal" className="fw-bold" hidden />
                             </div>
-                            <button onClick={()=>{/*setLoading(true);*/redirectOnline()}} className="btn btn-light color-primary">
+                            <button onClick={()=>{/*setLoading(true);*/redirectOnline()}} className="btn btn-light color-primary" disabled={Number.isNaN(priceShip) ? "disabled" : false}>
                               Đặt hàng
                             </button>
                           </div>

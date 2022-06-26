@@ -11,11 +11,11 @@ export default function Payments(){
     return(
         <>
                  <div className="d-flex align-items-center py-3 header">
-            <span className="fw-bold fs-5">
+            <span className="fw-bold fs-5 pos-relative">
               Phương thức thanh toán
+              <div className="line_bottom" />
             </span>
           </div>
-          <div className="line_bottom" />
           <div>
                 <div className="form-check my-3 fs-5">
                 <input className="form-check-input rad-primary" type="radio" checked={payments==='Tiền mặt'} name="radPayment" onChange={()=>dispatch(cartSlice.actions.changePayments('Tiền mặt'))}  id="radPayment"/>

@@ -8,6 +8,7 @@ import newsSlice from '../components/News/newsSlice'
 import productSlice from '../components/Product/productSlice'
 import cartSlice from '../components/Cart/cartSlice'
 import searchSlice from '../components/Search/searchSlice'
+import tokenSlice from '../components/Token/tokenSlice'
 const rootReducer = combineReducers({
     categories: categoriesReducer,
     category: categorySlice,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
     modal: modalSlice,
     news:newsSlice,
     cart:cartSlice,
+    token:tokenSlice,
 })
 export default rootReducer;
 

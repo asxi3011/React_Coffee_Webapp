@@ -8,6 +8,7 @@ import newsSlice from "../components/News/newsSlice"
 import productSlice from "../components/Product/productSlice"
 import cartSlice from '../components/Cart/cartSlice'
 import searchSlice from "../components/Search/searchSlice";
+import tokenSlice from "../components/Token/tokenSlice";
 const store = configureStore({
     reducer:{
         categories: categoriesSlice.reducer,
@@ -17,6 +18,7 @@ const store = configureStore({
         modal : modalSlice.reducer,
         news: newsSlice.reducer,
         cart:cartSlice.reducer,
+        token:tokenSlice.reducer,
         // Products: ,
         // Product: ,
         // GetOrder: ,
