@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom"
 import { useSelector,useDispatch} from 'react-redux';
 import axios from 'axios';
 import { io } from "socket.io-client";
-import Voices from '../components/Cart/Voices'
-import Info from '../components/Cart/Info'
-import cartSlice from '../components/Cart/cartSlice'
-import ThongBao from '../components/Partials/ThongBao'
-import modalSlice from '../components/Modal/modalSlice'
+import Voices from '../components/Client/Cart/Voices'
+import Info from '../components/Client/Cart/Info'
+import cartSlice from '../components/Client/Cart/cartSlice'
+import ThongBao from '../components/Client/Partials/ThongBao'
+import modalSlice from '../components/Client/Modal/modalSlice'
 import {createOrder} from '../redux/callApi'
 import {getTokenAhamove,getPriceCoupon,getPriceShip,getPriceTotal,getPriceAll,getCoupon,getCart,getName,getEmail,getPhone,getAddress,getNote,getPayments} from '../redux/selector'
 function Cart(){

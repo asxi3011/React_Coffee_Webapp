@@ -6,8 +6,8 @@ import { FaPlus, FaMinus } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 
-import ListSize from '../components/ListSize'
-import cartSlice from "../components/Cart/cartSlice";
+import ListSize from '../components/Client/ListSize'
+import cartSlice from "../components/Client/Cart/cartSlice";
 import {fetchDetailsProductRequest} from '../redux/callApi'
 const DetailProduct = () => {
     const dispatch = useDispatch();
@@ -26,6 +26,7 @@ const DetailProduct = () => {
     const [carts, setCarts] = useState({});
     const [checked, setChecked] = useState({});
     const { slug } = useParams()
+ 
     useEffect(() => {
         setCarts({
             ...info,

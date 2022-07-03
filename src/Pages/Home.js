@@ -1,12 +1,12 @@
 
 import { React ,memo,useState} from "react"
 import { useSelector} from 'react-redux';
-import Slider from '../components/Partials/Slider'
-import ListCategory from '../components/ListCategory'
+import Slider from '../components/Client/Partials/Slider'
+import ListCategory from '../components/Client/ListCategory'
 
 
-import ListProduct from "../components/ListProduct";
-import ListNews from '../components/ListNews'
+import ListProduct from "../components/Client/ListProduct";
+import ListNews from '../components/Client/ListNews'
 
 import {getNews,getStatusLoading,getListChecked,getCategoryChecked} from "../redux/selector";
 function Home() {

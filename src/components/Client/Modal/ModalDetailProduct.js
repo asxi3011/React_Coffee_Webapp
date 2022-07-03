@@ -7,7 +7,7 @@ import ListSize from '../ListSize'
 
 import cartSlice from "../Cart/cartSlice";
 
-import {getCart} from '../../redux/selector'
+import {getCart} from '../../../redux/selector'
 import { BsFillFileTextFill } from "react-icons/bs";
 import { FaPlus, FaMinus } from "react-icons/fa";
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Reply from '../components/CheckOrder/Reply';
+import Reply from '../components/Client/CheckOrder/Reply';
 
 
 

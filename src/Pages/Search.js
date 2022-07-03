@@ -1,8 +1,8 @@
 import React, { useState,useEffect } from 'react';
-import Reply from '../components/CheckOrder/Reply';
+import Reply from '../components/Client/CheckOrder/Reply';
 import {useSearchParams,useNavigate} from 'react-router-dom';
 import {fetchListSearch} from '../redux/callApi';
-import NotFound from '../components/Partials/NotFound';
+import NotFound from '../components/Client/Partials/NotFound';
 function Search(){
     const[search,setSearch]=useState("")
     const [searchParams, setSearchParams] = useSearchParams();

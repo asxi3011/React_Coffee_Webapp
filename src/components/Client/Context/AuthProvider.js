@@ -2,7 +2,7 @@ import React,{useEffect,useState} from 'react'
 
 import {useNavigate} from 'react-router-dom'
 
-import {authentication} from '../../Firebase/config'
+import {authentication} from '../../../Firebase/config'
 export const AuthContext = React.createContext();
 
 export default function AuthProvider({children}) {

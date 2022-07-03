@@ -2,7 +2,7 @@ import { React } from "react"
 
 import { Button, Modal, Container, Row, Col } from 'react-bootstrap';
 import {useSelector,useDispatch} from 'react-redux'
-import {getStatusCoupon} from '../../redux/selector'
+import {getStatusCoupon} from '../../../redux/selector'
 import modalSlice from './modalSlice'
 import cartSlice from "../Cart/cartSlice";
 

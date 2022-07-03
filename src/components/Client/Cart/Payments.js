@@ -3,7 +3,7 @@ import React,{useState,useEffect} from "react";
 
 import { useSelector,useDispatch} from 'react-redux';
 
-import {getPayments} from '../../redux/selector'
+import {getPayments} from '../../../redux/selector'
 import cartSlice from "./cartSlice";
 export default function Payments(){
     const dispatch = useDispatch();

@@ -2,7 +2,7 @@
 import {useState,useCallback} from 'react';
 import {useNavigate} from "react-router-dom"
 
-import {authentication,db} from '../../Firebase/config'
+import {authentication,db} from '../../../Firebase/config'
 import { RecaptchaVerifier,signInWithPhoneNumber} from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore"; 
 import { Form,Row,Col, Input, Button, Select,Space} from 'antd';

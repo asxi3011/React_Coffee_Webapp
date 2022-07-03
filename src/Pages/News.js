@@ -5,7 +5,7 @@ import {getNews} from "../redux/selector";
 
 import { useSelector} from 'react-redux';
 
-import ListNews from "../components/ListNews";
+import ListNews from "../components/Client/ListNews";
 export default function PageNews(){
     const listNews = useSelector(getNews);
   

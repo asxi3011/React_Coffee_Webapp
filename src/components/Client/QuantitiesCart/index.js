@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from "react-router-dom";
 import { useEffect } from "react"
 import {useSelector} from 'react-redux'
-import {getQuantitiesCart} from '../../redux/selector'
+import {getQuantitiesCart} from '../../../redux/selector'
 function QuantitiesCart() {
     const quantities = useSelector(getQuantitiesCart);
     

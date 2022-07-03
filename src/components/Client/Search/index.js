@@ -2,7 +2,7 @@
 import React,{useState,useRef} from 'react';
 import {useSelector,useDispatch} from 'react-redux'
 import {Link,useNavigate} from 'react-router-dom'
-import {getSearchValue,getListRemaining} from '../../redux/selector'
+import {getSearchValue,getListRemaining} from '../../../redux/selector'
 import searchSlice from './searchSlice';
 import $ from 'jquery';
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;

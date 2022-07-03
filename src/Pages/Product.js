@@ -4,12 +4,11 @@ import { React ,useState,useEffect} from "react"
 import {getNews,getStatusLoading,getProductInCategory,getCategoryChecked} from "../redux/selector";
 
 import { useSelector,useDispatch} from 'react-redux';
-import ListProduct from "../components/ListProduct";
+import ListProduct from "../components/Client/ListProduct";
 
-import ListCategory from '../components/ListCategory'
+import ListCategory from '../components/Client/ListCategory'
 
-import Loading from '../components/Partials/Loading'
-import NotFound from "../components/Partials/NotFound";
+import NotFound from "../components/Client/Partials/NotFound";
 
 export default function PageProduct({nameSelected}){
     const dispatch = useDispatch();

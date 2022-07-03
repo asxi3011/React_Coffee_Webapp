@@ -1,7 +1,7 @@
 
 import Loading from './Loading'
 import React from 'react'
-import logo from '../../logoCoffee.gif'
+import logo from '../../../logoCoffee.gif'
 export default function Waitting() {
     return(
         <div className="d-flex vw-100 vh-100">

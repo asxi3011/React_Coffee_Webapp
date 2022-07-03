@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState,useEffect} from 'react'
-import MenuProfile from '../components/MenuProfile'
-import InfoUser from '../components/InfoUser'
+import MenuProfile from '../components/Client/MenuProfile'
+import InfoUser from '../components/Client/InfoUser'
 import {authentication} from '../Firebase/config'
 import {signOut} from 'firebase/auth'
 import {useNavigate} from"react-router-dom";

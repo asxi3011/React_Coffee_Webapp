@@ -2,7 +2,7 @@
 import { Link,useSearchParams} from "react-router-dom";
 import { React ,memo,useState,useEffect} from "react"
 import {Alert,Button} from'react-bootstrap'
-import NotFound from '../components/Partials/NotFound';
+import NotFound from '../components/Client/Partials/NotFound';
 
 import axios from 'axios';
 

@@ -2,9 +2,9 @@ import React from "react";
 
 import { useSelector,useDispatch} from 'react-redux';
 import $ from 'jquery'
-import {getName,getEmail,getPhone,getAddress,getNote,getTokenAhamove} from '../../redux/selector'
+import {getName,getEmail,getPhone,getAddress,getNote,getTokenAhamove} from '../../../redux/selector'
 import cartSlice from "./cartSlice";
-import {getShipFee} from "../../redux/callApi"
+import {getShipFee} from "../../../redux/callApi"
 import Payments from "./Payments";
 import { useState,useEffect} from "react";
 export default function Info(){

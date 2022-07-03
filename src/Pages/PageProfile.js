@@ -4,7 +4,7 @@ import { React,useEffect} from "react"
 
 
 import { useSelector} from 'react-redux';
-import Profile from "../components/Profile";
+import Profile from "../components/Client/Profile";
 
 export default function PageProfile(){
   

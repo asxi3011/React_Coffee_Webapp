@@ -23,22 +23,22 @@ import Search from './Pages/Search'
 import PageProfile from './Pages/PageProfile';
 import Profile from './Pages/Profile';
 //Components
-import cartSlice from './components/Cart/cartSlice';
-import newsSlice from "./components/News/newsSlice";
-import Header from './components/Partials/Header'
-import modalSlice from "./components/Modal/modalSlice";
-import ModalCoupon from './components/Modal/ModalCoupon'
-import Loading from './components/Partials/Loading'
+import cartSlice from './components/Client/Cart/cartSlice';
+import newsSlice from "./components/Client/News/newsSlice";
+import Header from './components/Client/Partials/Header'
+import modalSlice from "./components/Client/Modal/modalSlice";
+import ModalCoupon from './components/Client/Modal/ModalCoupon'
+import Loading from './components/Client/Partials/Loading'
 //redux
 import { getStatusCoupon,getStatusLoading} from './redux/selector';
 import {fetchNewsRequest,fetchTokenAhamove,fetchCategoryRequest,fetchProductsRequest} from './redux/callApi'
-import categoriesSlice from "./components/ListCategory/categoriesSlice";
-import productSlice from "./components/Product/productSlice";
-import tokenSlice from "./components/Token/tokenSlice"
-import categorySlice from './components/Category/categorySlice';
-import NotFound from './components/Partials/NotFound';
-import Waitting from './components/Partials/Waitting'
-import AuthProvider from './components/Context/AuthProvider'
+import categoriesSlice from "./components/Client/ListCategory/categoriesSlice";
+import productSlice from "./components/Client/Product/productSlice";
+import tokenSlice from "./components/Client/Token/tokenSlice"
+import categorySlice from './components/Client/Category/categorySlice';
+import NotFound from './components/Client/Partials/NotFound';
+import Waitting from './components/Client/Partials/Waitting'
+import AuthProvider from './components/Client/Context/AuthProvider'
 function App() {
   // const [loading,setLoading] = useState(true);
   // const [categorys, setCategorys] = useState([])
@@ -101,7 +101,7 @@ function App() {
           <Header/>
           <Routes>
             <Route path="/" element={<Home/>} />
-            {/* <Route path="/product/:slug" element={<DetailProduct/>} /> */}
+            <Route path="/product/:slug" element={<DetailProduct/>} />
             <Route path="/login" element={<PageProfile />}/>
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/cart" element={<Cart />}/>
@@ -111,8 +111,10 @@ function App() {
             <Route path="/news/:slug" element={<DetailNew />} />
             <Route path="/search" element={<Search />} />
             <Route path="/:slug" element={<PageProduct />} />
-      
+            <Route path="/Admin"/>
+            
           </Routes>
+          
           <ModalCoupon />
           <Loading status={loaded}/>
         </div>

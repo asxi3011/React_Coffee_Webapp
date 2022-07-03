@@ -2,7 +2,7 @@ import React from "react";
 import ItemCart from '../ItemCart/index'
 import { useSelector,useDispatch} from 'react-redux';
 import {Link} from 'react-router-dom'
-import {getQuantitiesCart,getPriceCoupon,getPriceTotal,getCoupon,getCart,getPriceShip} from '../../redux/selector'
+import {getQuantitiesCart,getPriceCoupon,getPriceTotal,getCoupon,getCart,getPriceShip} from '../../../redux/selector'
 import cartSlice from "./cartSlice";
 import modalSlice from '../Modal/modalSlice'
 

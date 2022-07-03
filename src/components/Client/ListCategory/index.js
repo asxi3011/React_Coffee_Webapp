@@ -4,8 +4,7 @@ import { React, memo,useState,useEffect } from "react"
 import { useDispatch, useSelector } from 'react-redux';
 import Category from "../Category/index";
 
-import {getCategories,getProducts} from "../../redux/selector"
-import {fetchCategory} from "../../redux/actions"
+import {getCategories,getProducts} from "../../../redux/selector"
 
 
 import axios from "axios";
