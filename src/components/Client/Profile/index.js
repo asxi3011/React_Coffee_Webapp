@@ -5,11 +5,13 @@ import { authentication, db } from "../../../Firebase/config";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { collection, getDocs, addDoc } from "firebase/firestore";
 import { Form, Row, Col, Input, Button, Select, Space } from "antd";
-import $ from "jquery";
+import cartSlice from "../Cart/cartSlice";
+import { useDispatch } from "react-redux";
 authentication.languageCode = "it";
 export default function Profile() {
   const { Option } = Select;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showOTP, setShowOTP] = useState(true);
   const [OTP, setOTP] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -81,45 +83,47 @@ export default function Profile() {
     }
   };
   const verifyOTP = async (e) => {
-    // const MAX_LENG_OTP = 6;
-    // let otp = e.target.value;
-    // if (otp.length === MAX_LENG_OTP) {
-    //   let confirmationResult = window.confirmationResult;
-    //   confirmationResult
-    //     .confirm(otp)
-    //     .then(async (result) => {
-    //       alert("Xin chào");
-    //       const user = await result.user;
-    // const querySnapshot = await getDocs(collection(db, "users"));
-    // querySnapshot.forEach((doc) => {
-    //   console.log(doc.data());
-    // });
-    //         navigate("/profile");
-    //       } catch {
-    //         alert("Khong them dc db");
-    //       }
-    //     })
-    //     .catch((e) => {
-    //       alert("Wrong OTP. Try Again");
-    //     });
-    // }
-    // setOTP(e.target.value);
-
-    try {
-      const docRef = await addDoc(collection(db, "users"), {
-        ID: "UFFyjEKBCapR7oTH4cwk",
-        birth: "1",
-        email: "test",
-        lastName: "test",
-        name: "test",
-        phone: "test",
-        sex: true,
-      });
-      console.log(docRef.id);
-      navigate("/profile");
-    } catch {
-      alert("Khong them dc db");
+    const MAX_LENG_OTP = 6;
+    let otp = e.target.value;
+    if (otp.length === MAX_LENG_OTP) {
+      let confirmationResult = window.confirmationResult;
+      confirmationResult
+        .confirm(otp)
+        .then(async (result) => {
+          alert("Xin chào");
+          const user = await result.user;
+          console.log(user);
+          const arr = [];
+          const querySnapshot = await getDocs(collection(db, "users"));
+          const temp = querySnapshot.forEach((doc) => arr.push(doc.data()));
+          const rs = arr.find((ele) => ele.ID === user.uid);
+          if (rs) {
+            dispatch(cartSlice.actions.setNameCustomer(e.target.value));
+            navigate("/profile");
+          } else {
+            try {
+              const docRef = await addDoc(collection(db, "users"), {
+                ID: user.uid,
+                birth: "",
+                email: "",
+                lastName: "",
+                name: "",
+                phone: user, // change phone
+                sex: true,
+              });
+              console.log(docRef.id);
+              navigate("/profile");
+            } catch {
+              alert("Khong them dc db");
+            }
+            navigate("/newAccount");
+          }
+        })
+        .catch((e) => {
+          alert("Wrong OTP. Try Again");
+        });
     }
+    setOTP(e.target.value);
   };
   return (
     <Form
