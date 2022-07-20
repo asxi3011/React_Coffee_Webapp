@@ -1,10 +1,35 @@
 import { Form } from "react-bootstrap";
-
+import { useDispatch, useSelector } from "react-redux";
 import { useUser } from "../../../hooks/useUser";
-
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  useDisclosure,
+  Radio,
+  RadioGroup,
+  Stack,
+} from "@chakra-ui/react"
+import { useState, useEffect } from "react";
+import EditAccount from "../Login/EditAccount";
+import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
+import { db, authentication } from "../../../Firebase/config";
+import usersSlice from "../Login/usersSlice";
+import { getUser } from "../../../redux/selector";
 export default function InfoUser() {
-  const user = useUser("11d8RQnpQ5S4fHSU3LiM7DIJdl43");
-  return user ? (
+  const checkUser = authentication.currentUser;
+  const user = useSelector(getUser);
+  const [showEdit, setShowEdit] = useState(false);
+  const dispatch = useDispatch();
+  return checkUser?.uid ? (
     <div className="col">
       <span className="fs-1 pos-relative">
         Thông tin tài khoản
@@ -19,6 +44,7 @@ export default function InfoUser() {
               className="form-control"
               value={user.name}
               aria-label="First name"
+              readOnly={true}
             />
           </div>
           <div className="col">
@@ -27,11 +53,25 @@ export default function InfoUser() {
               className="form-control"
               value={user.lastName}
               aria-label="Last name"
+              readOnly={true}
             />
           </div>
         </div>
       </div>
-
+      <div className="mt-3">
+        <span className="">Địa chỉ</span>
+        <div className="row mt-2">
+          <div className="col">
+            <input
+              type="text"
+              className="form-control"
+              value={user.address}
+              aria-label="First name"
+              disabled
+            />
+          </div>
+        </div>
+      </div>
       <div className="mt-3">
         <span className="">Số điện thoại</span>
         <div className="row mt-2">
@@ -48,7 +88,7 @@ export default function InfoUser() {
       </div>
 
       <div className="mt-3">
-        <span className="">Sinh nhật</span>
+        <span className="">Sinh nhật ( Không thể đổi )</span>
         <div className="row mt-2">
           <div className="col">
             <input
@@ -76,26 +116,17 @@ export default function InfoUser() {
           </div>
         </div>
       </div>
-      <Form className="mt-3">
-        <Form.Check
-          inline
-          label="Nam"
-          name="group1"
-          type="radio"
-          id="default-nam"
-          defaultChecked={user.sex}
-        />
-
-        <Form.Check
-          inline
-          label="Nữ"
-          name="group1"
-          type="radio"
-          id="default-nu"
-          defaultChecked={!user.sex}
-        />
-      </Form>
-      <div className="btn btn-danger">Chinh sua</div>
+     
+      <RadioGroup value={user.sex} isDisabled mt="4">
+        <Stack direction="row">
+          <Radio value={true}>Nam</Radio>
+          <Radio value={false}>Nữ</Radio>
+        </Stack>
+      </RadioGroup>
+      <div className="btn btn-danger mt-3" onClick={() => setShowEdit(!showEdit)}>
+        Chinh sua
+      </div>
+      {showEdit && <EditAccount isShow={showEdit} setShowEdit={setShowEdit} />}
     </div>
   ) : null;
 }

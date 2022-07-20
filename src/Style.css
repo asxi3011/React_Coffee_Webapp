@@ -183,7 +183,7 @@
   white-space: nowrap;
 }
 .pd-header {
-  padding-top: 80px;
+  padding-top: 100px;
 }
 
 .text-disable {
@@ -236,6 +236,9 @@
   border-radius: 8px;
   width: 100%;
 }
+.mw-400{
+  min-width: 300px !important;
+}
 .border-info-left {
   padding: 12px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -245,6 +248,7 @@
 }
 .options-active {
   color: #fa8c16;
+  font-weight: bold;
 }
 .half-down-border-product {
   box-shadow: rgba(17, 12, 46, 0.15) 0px 5px 5px 0px;
@@ -278,6 +282,11 @@
   bottom: 52px;
   left: 20px;
   letter-spacing: 5px;
+}
+.card-info-bean {
+  position: absolute;
+  top: 10px;
+  left: 20px;
 }
 .text-metal-dark {
   font-family: "Bree Serif", serif;
@@ -1094,15 +1103,26 @@ button.btn_action {
   background: #f5f3f35c;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
-
+.overFlowY-hidden {
+  overflow-y: hidden;
+}
+.overFlowY-scroll {
+  overflow-y: scroll;
+}
 .img-preview-post {
   width: 260px;
   height: 120px;
+}
+.itemList:hover {
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .box-details-order {
   background: #f5f3f35c;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  max-height: 500px;
 }
 .pos-rela {
   position: relative;

@@ -43,6 +43,13 @@ import categorySlice from "./components/Client/Category/categorySlice";
 import NotFound from "./components/Client/Partials/NotFound";
 import Waitting from "./components/Client/Partials/Waitting";
 import AuthProvider from "./components/Client/Context/AuthProvider";
+import HistoryOrder from "./components/Client/HistoryOrder";
+import { authentication } from "./Firebase/config";
+import { useUser } from "./hooks/useUser";
+import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
+import { db } from "./Firebase/config";
+import usersSlice from "./components/Client/Login/usersSlice";
+
 function App() {
   // const [loading,setLoading] = useState(true);
   // const [categorys, setCategorys] = useState([])
@@ -57,28 +64,27 @@ function App() {
     dispatch(modalSlice.actions.toggleLoading());
     const quantities = localStorage.getItem("countQuanity") || 0;
     const cart = localStorage.getItem("arrayCart") || [];
-    const nameCus = localStorage.getItem("nameCus") || "";
-    const phoneCus = localStorage.getItem("phoneCus") || "";
-    const emailCus = localStorage.getItem("emailCus") || "";
-    const addressCus = localStorage.getItem("addressCus") || "";
-    const noteCus = localStorage.getItem("noteCus") || "";
-    const token = localStorage.getItem("tokenAhamove");
     if (cart.length > 0) {
       dispatch(cartSlice.actions.updateCart(cart));
       dispatch(cartSlice.actions.setQuantities(quantities));
     }
-    if (!token) {
-      const getToken = fetchTokenAhamove();
-      getToken.then((result) => {
-        localStorage.setItem("tokenAhamove", result.data.token);
-      });
-    }
-    dispatch(tokenSlice.actions.fetchTokenAhamove(token));
-    dispatch(cartSlice.actions.setEmail(emailCus));
-    dispatch(cartSlice.actions.setNameCustomer(nameCus));
-    dispatch(cartSlice.actions.setPhone(phoneCus));
-    dispatch(cartSlice.actions.setAddress(addressCus));
-    dispatch(cartSlice.actions.setNote(noteCus));
+    
+    const getToken = fetchTokenAhamove();
+    getToken.then((result) => {
+      dispatch(tokenSlice.actions.fetchTokenAhamove(result.data.token));
+      
+    });
+      const nameCus = localStorage.getItem("nameCus") || "";
+      const phoneCus = localStorage.getItem("phoneCus") || "";
+      const emailCus = localStorage.getItem("emailCus") || "";
+      const addressCus = localStorage.getItem("addressCus") || "";
+      const noteCus = localStorage.getItem("noteCus") || "";
+      dispatch(cartSlice.actions.setEmail(emailCus));
+      dispatch(cartSlice.actions.setNameCustomer(nameCus));
+      dispatch(cartSlice.actions.setPhone(phoneCus));
+      dispatch(cartSlice.actions.setAddress(addressCus));
+      dispatch(cartSlice.actions.setNote(noteCus));
+
     const listNews = fetchNewsRequest();
     const listCategory = fetchCategoryRequest();
     const listProduct = fetchProductsRequest();
@@ -100,7 +106,7 @@ function App() {
       dispatch(modalSlice.actions.toggleLoading());
       setLoading(false);
     });
-  }, []);
+  }, [ dispatch]);
 
   return !loading ? (
     <ChakraProvider>
@@ -109,8 +115,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/product/:slug" element={<DetailProduct />} />
+          <Route path="/me/orders" element={<HistoryOrder />} />
           <Route path="/login" element={<PageProfile />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<PageProfile />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/paymentOnline" element={<PaymentOnline />} />
           <Route path="/checkOrder" element={<CheckOrder />} />
@@ -129,18 +136,5 @@ function App() {
     <Waitting />
   );
 }
-{
-  /* <Header localCount={localCount} setCoupon={setCoupon}/>
-        <Routes>
-          <Route path="/" element={<Home categorys={categorys} products={products} news={news} />} />
-      
-          <Route path="/news/:slug" element={<NewId />} />
-          <Route path="/:slug" element={<ProductInCategory setLoading={setLoading} categorys={categorys} />} />
-          <Route path="/product/:slug" element={<DetailProduct setLocalCount={setLocalCount}/>} />
-          
-          <Route path="/cart" element={localCount> 0 ?<ShopingCart setLocalCount={setLocalCount} coupon={coupon}/>: <ThongBao></ThongBao>} />
-        </Routes>
-        <Footer />
-        <Loading status={loading}/> */
-}
+
 export default App;

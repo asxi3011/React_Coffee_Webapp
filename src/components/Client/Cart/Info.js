@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
+
 import {
   getName,
   getEmail,
   getPhone,
   getAddress,
   getNote,
-  getTokenAhamove,
+  getTokenAhamove,getUser
 } from "../../../redux/selector";
 import cartSlice from "./cartSlice";
 import { getShipFee } from "../../../redux/callApi";
@@ -22,10 +23,12 @@ export default function Info() {
   const phone = useSelector(getPhone);
   const address = useSelector(getAddress);
   const note = useSelector(getNote);
+  const user = useSelector(getUser);
   const tokenAhamove = useSelector(getTokenAhamove);
+  
   const [isAcceptAddress, setAcceptAddress] = useState(true);
-  const handleAddress = () => {
-    console.log(tokenAhamove);
+  const handleAddress = useCallback(() => {
+    
     const shipFee = getShipFee(tokenAhamove, address, name, phone, note);
     shipFee
       .then((result) => {
@@ -38,17 +41,16 @@ export default function Info() {
           case 406:
             alert("Địa chỉ không hợp lệ");
             setAcceptAddress(false);
-            dispatch(cartSlice.actions.changePriceShip(NaN));
+            dispatch(cartSlice.actions.changePriceShip(0));
             return;
           default:
             return;
         }
       });
-  };
-  const user = useUser("11d8RQnpQ5S4fHSU3LiM7DIJdl43");
-  useEffect(() => {
-    handleAddress();
-  }, []);
+  }, [tokenAhamove, address, name, phone, note, dispatch]);
+  // useEffect(() => {
+  //   handleAddress();
+  // }, [handleAddress]);
   return (
     <div className="col-lg-6 col-md-12">
       <div className="pd-12">

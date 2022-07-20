@@ -23,7 +23,9 @@ import {
   getAddress,
   getNote,
   getPayments,
+  getUser,
 } from "../redux/selector";
+import { isPhone } from "../utils/convert";
 function Cart() {
   let navigate = useNavigate();
   const dispatch = useDispatch();
@@ -31,6 +33,7 @@ function Cart() {
   const email = useSelector(getEmail);
   const phone = useSelector(getPhone);
   const address = useSelector(getAddress);
+  const user = useSelector(getUser);
   const note = useSelector(getNote);
   const priceCoupon = useSelector(getPriceCoupon);
   const coupon = useSelector(getCoupon);
@@ -40,7 +43,7 @@ function Cart() {
   const payments = useSelector(getPayments);
   const priceShip = useSelector(getPriceShip);
   const tokenAhamove = useSelector(getTokenAhamove);
-
+  
   const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
@@ -66,84 +69,162 @@ function Cart() {
   const redirectOnline = () => {
     if (validateInput(name, address, phone, email)) {
       dispatch(modalSlice.actions.toggleLoading());
-      localStorage.setItem("nameCus", name);
-      localStorage.setItem("emailCus", email);
-      localStorage.setItem("phoneCus", phone);
-      localStorage.setItem("addressCus", address);
-      localStorage.setItem("noteCus", note);
-      axios
-        .post("https://sever-coffeehouse.herokuapp.com/order", {
-          noteOrder: note,
-          hotenOrder: name,
-          userIDOrder: "userID",
-          emailOrder: email,
-          sdtOrder: phone,
-          addressOrder: address,
-          priceCharge: priceShip,
-          priceCoupon: priceCoupon,
-          nameCoupon: coupon,
-          priceTotal: priceTotal,
-          priceAll: priceAll,
-          listProductOrder: carts,
-          payment: payments,
-        })
-        .then(function (response) {
-          if (payments === "VNPay") {
-            axios
-              .post(
-                "https://sever-coffeehouse.herokuapp.com/create_payment_url",
-                {
-                  priceTotal: priceAll,
-                  orderId: response.data.idOrder,
-                }
-              )
-              .then(function (responseCode) {
-                dispatch(modalSlice.actions.toggleLoading());
-                window.location.href = responseCode.data;
+      if(user.docID){
+        console.log("RUN HAVE DOC ID ");
+        axios
+          .post("https://sever-coffeehouse.herokuapp.com/order", {
+            noteOrder: note,
+            hotenOrder: name,
+            docID: user.docID,
+            emailOrder: email,
+            sdtOrder: phone,
+            addressOrder: address,
+            priceCharge: priceShip,
+            priceCoupon: priceCoupon,
+            nameCoupon: coupon,
+            priceTotal: priceTotal,
+            priceAll: priceAll,
+            listProductOrder: carts,
+            payment: payments,
+          })
+          .then(function (response) {
+            if (payments === "VNPay") {
+              axios
+                .post(
+                  "https://sever-coffeehouse.herokuapp.com/create_payment_url",
+                  {
+                    priceTotal: priceTotal,
+                    orderId: response.data.idOrder,
+                  }
+                )
+                .then(function (responseCode) {
+                  dispatch(modalSlice.actions.toggleLoading());
+                  window.location.href = responseCode.data;
+                });
+            } else {
+              var idOrder = response.data.idOrder;
+              const socket = io("https://sever-coffeehouse.herokuapp.com", {
+                transports: ["websocket"],
               });
-          } else {
-            var idOrder = response.data.idOrder;
-            const socket = io("https://sever-coffeehouse.herokuapp.com", {
-              transports: ["websocket"],
-            });
-            socket.emit("don-hang-moi", response.data);
-            const order = createOrder(
-              tokenAhamove,
-              address,
-              name,
-              phone,
-              note,
-              carts
-            );
-            order.then((order) => {
-              console.log(
-                "Xem chi tiết đơn hàng tại: ",
-                order.data.shared_link
+              socket.emit("don-hang-moi", response.data);
+              const order = createOrder(
+                tokenAhamove,
+                address,
+                name,
+                phone,
+                note,
+                carts
               );
-            });
-            axios
-              .post("https://sever-coffeehouse.herokuapp.com/sendMail", {
-                mail: email,
-                address: address,
-                priceTotal: priceAll,
-                name: name,
-                idOrder: idOrder,
-              })
-              .then(function (responseMail) {
-                //  setLoading(false);
-                dispatch(modalSlice.actions.toggleLoading());
-                alert(
-                  "Đặt hàng thành công ! Quý khách vui lòng kiểm tra email để biết được id đơn hàng và tra cứu thông tin !"
+              order.then((order) => {
+                console.log(
+                  "Xem chi tiết đơn hàng tại: ",
+                  order.data.shared_link
                 );
-                dispatch(cartSlice.actions.updateCart("[]"));
-                navigate("/");
               });
-          }
-          clearCart();
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+              axios
+                .post("https://sever-coffeehouse.herokuapp.com/sendMail", {
+                  mail: email,
+                  address: address,
+                  priceTotal: priceAll,
+                  name: name,
+                  idOrder: idOrder,
+                })
+                .then(function (responseMail) {
+                  //  setLoading(false);
+                  dispatch(modalSlice.actions.toggleLoading());
+                  alert(
+                    "Đặt hàng thành công ! Quý khách vui lòng kiểm tra email để biết được id đơn hàng và tra cứu thông tin !"
+                  );
+                  dispatch(cartSlice.actions.updateCart("[]"));
+                  navigate("/");
+                });
+            }
+            clearCart();
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+      else{
+        console.log("RUNE WITHOUT NE");
+        localStorage.setItem("nameCus", name);
+        localStorage.setItem("emailCus", email);
+        localStorage.setItem("phoneCus", phone);
+        localStorage.setItem("addressCus", address);
+        localStorage.setItem("noteCus", note);
+        axios
+          .post("https://sever-coffeehouse.herokuapp.com/order", {
+            noteOrder: note,
+            hotenOrder: name,
+            emailOrder: email,
+            sdtOrder: phone,
+            addressOrder: address,
+            priceCharge: priceShip,
+            priceCoupon: priceCoupon,
+            nameCoupon: coupon,
+            priceTotal: priceTotal,
+            priceAll: priceAll,
+            listProductOrder: carts,
+            payment: payments,
+          })
+          .then(function (response) {
+            if (payments === "VNPay") {
+              axios
+                .post(
+                  "https://sever-coffeehouse.herokuapp.com/create_payment_url",
+                  {
+                    priceTotal: priceTotal,
+                    orderId: response.data.idOrder,
+                  }
+                )
+                .then(function (responseCode) {
+                  dispatch(modalSlice.actions.toggleLoading());
+                  window.location.href = responseCode.data;
+                });
+            } else {
+              var idOrder = response.data.idOrder;
+              const socket = io("https://sever-coffeehouse.herokuapp.com", {
+                transports: ["websocket"],
+              });
+              socket.emit("don-hang-moi", response.data);
+              const order = createOrder(
+                tokenAhamove,
+                address,
+                name,
+                phone,
+                note,
+                carts
+              );
+              order.then((order) => {
+                console.log(
+                  "Xem chi tiết đơn hàng tại: ",
+                  order.data.shared_link
+                );
+              });
+              axios
+                .post("https://sever-coffeehouse.herokuapp.com/sendMail", {
+                  mail: email,
+                  address: address,
+                  priceTotal: priceAll,
+                  name: name,
+                  idOrder: idOrder,
+                })
+                .then(function (responseMail) {
+                  //  setLoading(false);
+                  dispatch(modalSlice.actions.toggleLoading());
+                  alert(
+                    "Đặt hàng thành công ! Quý khách vui lòng kiểm tra email để biết được id đơn hàng và tra cứu thông tin !"
+                  );
+                  dispatch(cartSlice.actions.updateCart("[]"));
+                  navigate("/");
+                });
+            }
+            clearCart();
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
     } else {
       alert("Vui long nhập email và thông tin không được để trống");
     }

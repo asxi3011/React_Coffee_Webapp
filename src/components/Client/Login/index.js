@@ -5,15 +5,18 @@ import { authentication, db } from "../../../Firebase/config";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { collection, getDocs, addDoc } from "firebase/firestore";
 import { Form, Row, Col, Input, Button, Select, Space } from "antd";
-import cartSlice from "../Cart/cartSlice";
 import { useDispatch } from "react-redux";
+import { convertTypeNumber } from "../../../utils/convert.js";
+import usersSlice from "./usersSlice";
+import ModalOTP from "../OTP/index";
+import HistoryOrder from "../HistoryOrder/index";
 authentication.languageCode = "it";
-export default function Profile() {
+export default function Login() {
   const { Option } = Select;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [showOTP, setShowOTP] = useState(true);
   const [OTP, setOTP] = useState("");
+  const [showOTP, setShowOTP] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isDisabledButton, setIsDisabledButton] = useState(true);
   const phoneCode = "+84";
@@ -25,9 +28,14 @@ export default function Profile() {
     console.log("Failed:", errorInfo);
   };
   const handleClickSendCode = () => {
-    console.log("click");
-    setShowOTP(true);
-    requestOTP();
+    let str = phoneNumber.replace(/\b0+/g, "");
+    let phone = phoneCode + str;
+    if (phone.length === 12) {
+      setShowOTP(true);
+      requestOTP();
+    } else {
+      alert("sai sdt");
+    }
   };
 
   const generateRecaptcha = () => {
@@ -59,16 +67,13 @@ export default function Profile() {
       </Select>
     </Form.Item>
   );
+
   const requestOTP = () => {
     let str = phoneNumber.replace(/\b0+/g, "");
     let phone = phoneCode + str;
-    console.log(phone);
-    generateRecaptcha();
-    let appriver = window.recaptchaVerifier;
-    console.log("after", window.recaptchaVerifier);
-    console.log("ap", appriver);
-    console.log("config", authentication);
-    if (phone.length >= 12) {
+    if (phone.length === 12) {
+      generateRecaptcha();
+      let appriver = window.recaptchaVerifier;
       signInWithPhoneNumber(authentication, phone, appriver)
         .then((confirmationResult) => {
           // SMS sent. Prompt user to type the code from the message, then sign the
@@ -80,51 +85,58 @@ export default function Profile() {
         .catch((error) => {
           console.log(error);
         });
+    } else {
+      alert("sai sdt");
     }
   };
-  const verifyOTP = async (e) => {
-    const MAX_LENG_OTP = 6;
-    let otp = e.target.value;
-    if (otp.length === MAX_LENG_OTP) {
-      let confirmationResult = window.confirmationResult;
-      confirmationResult
-        .confirm(otp)
-        .then(async (result) => {
-          alert("Xin chào");
-          const user = await result.user;
-          console.log(user);
-          const arr = [];
-          const querySnapshot = await getDocs(collection(db, "users"));
-          const temp = querySnapshot.forEach((doc) => arr.push(doc.data()));
-          const rs = arr.find((ele) => ele.ID === user.uid);
-          if (rs) {
-            dispatch(cartSlice.actions.setNameCustomer(e.target.value));
-            navigate("/profile");
-          } else {
-            try {
-              const docRef = await addDoc(collection(db, "users"), {
-                ID: user.uid,
-                birth: "",
-                email: "",
-                lastName: "",
-                name: "",
-                phone: user, // change phone
-                sex: true,
-              });
-              console.log(docRef.id);
-              navigate("/profile");
-            } catch {
-              alert("Khong them dc db");
-            }
-            navigate("/newAccount");
-          }
-        })
-        .catch((e) => {
-          alert("Wrong OTP. Try Again");
-        });
-    }
-    setOTP(e.target.value);
-  };
+  // const verifyOTP = async (e) => {
+  //   const MAX_LENG_OTP = 6;
+  //   let otp = e.target.value;
+  //   // if (otp.length === MAX_LENG_OTP) {
+  //   //   let confirmationResult = window.confirmationResult;
+  //   //   confirmationResult
+  //   //     .confirm(otp)
+  //   //     .then(async (result) => {
+  //   //       const user = await result.user;
+  //   //       try {
+  //   //         const arr = [];
+  //   //         const querySnapshot = await getDocs(collection(db, "users"));
+  //   //         const temp = querySnapshot.forEach((doc) =>
+  //   //           arr.push({ ...doc.data(), idDoc: doc.id })
+  //   //         );
+  //   //         const rs = arr?.find((ele) => ele.ID === user.uid);
+  //   //         if (rs) {
+  //   //           dispatch(usersSlice.actions.setUser(rs));
+  //   //           navigate("/profile");
+  //   //         } else {
+  //   //           try {
+  //   //             dispatch(usersSlice.actions.setIsNewAccount(true));
+  //   //             const docRef = await addDoc(collection(db, "users"), {
+  //   //               ID: user.uid,
+  //   //               birth: "",
+  //   //               email: "",
+  //   //               lastName: "",
+  //   //               name: "",
+  //   //               phone: user.phoneNumber, // change phone
+  //   //               sex: true,
+  //   //             });
+  //   //             console.log(docRef.id);
+  //   //             navigate("/profile");
+  //   //           } catch {
+  //   //             alert("Khong them dc db");
+  //   //           }
+  //   //           navigate("/newAccount");
+  //   //         }
+  //   //       } catch {
+  //   //         console.log("khong tim thay user");
+  //   //       }
+  //   //     })
+  //   //     .catch((e) => {
+  //   //       alert("Wrong OTP. Try Again");
+  //   //     });
+  //   // }
+  //   setOTP(e.target.value);
+  // };
   return (
     <Form
       className="m-auto"
@@ -158,30 +170,7 @@ export default function Profile() {
           style={{ width: "100%" }}
         />
       </Form.Item>
-      {showOTP ? (
-        <Form.Item
-          label="OTP"
-          name="otp"
-          rules={[
-            {
-              required: true,
-              message: "Nhập mã otp!",
-            },
-          ]}
-        >
-          <Input
-            value={OTP}
-            onChange={(e) => {
-              verifyOTP(e);
-            }}
-            maxLength={6}
-            style={{ width: "100%" }}
-          />
-        </Form.Item>
-      ) : (
-        <></>
-      )}
-
+      <ModalOTP isShow={showOTP} setIsShow={setShowOTP}></ModalOTP>
       <Form.Item
         wrapperCol={{
           offset: 8,

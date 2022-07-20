@@ -1,5 +1,5 @@
 import React from "react";
-export default function SuccessReply({ order, size }) {
+export default function DetailOrder({ order }) {
   function convertDate(createdAt) {
     var date = new Date(createdAt);
     return (
@@ -15,15 +15,9 @@ export default function SuccessReply({ order, size }) {
   console.log("HERE", order);
   return (
     order && (
-      <div className="row h-100">
-        <div className="d-flex justify-content-center">
-          <div
-            className={
-              size === "full"
-                ? "col-12 p-4 rounded box-details-order"
-                : "col-6 p-4 rounded box-details-order"
-            }
-          >
+      <div className="row mt-3">
+        <div className="d-flex justify-content-center my-5">
+          <div className="col-12 p-4 rounded box-details-order">
             <h3 className="text-center fw-bold">Chi tiết đơn hàng</h3>
             <div>
               <div className="d-flex justify-content-between">
@@ -32,11 +26,7 @@ export default function SuccessReply({ order, size }) {
                     <span className="fw-bold">Mã đơn hàng: </span>
                     {order.idOrder}
                   </div>
-                  <div className="my-2">
-                    {order.statusOrder === "done" || order.paid === true
-                      ? "Paid"
-                      : "cancel"}
-                  </div>
+                  <div className="my-2">{order.status}</div>
                   <div className="my-2">
                     Ngày: {convertDate(order.createdAt)}
                   </div>
@@ -49,7 +39,7 @@ export default function SuccessReply({ order, size }) {
               </div>
               <div id="appendListCategory">
                 <h5>Giỏ hàng</h5>
-                <div className={size === "full" ? "" : "line_bottom"}></div>
+                <div className="line_bottom"></div>
                 <table className="table table-striped my-3 align-middle text-center table-text-form">
                   <thead>
                     <tr>
@@ -59,6 +49,7 @@ export default function SuccessReply({ order, size }) {
                       <th className="">Size</th>
                       <th className="">Giá sản phẩm</th>
                       <th className="">Ghi chú</th>
+                      <th>Tổng giá</th>
                     </tr>
                   </thead>
                   {order.listProductCart.map((od, index) => (
@@ -73,14 +64,12 @@ export default function SuccessReply({ order, size }) {
                         <td>{od.priceStandard.toLocaleString()}</td>
 
                         <td>{od.note}</td>
+                        <td>{od.priceAll}</td>
                       </tr>
                     </tbody>
                   ))}
                 </table>
-                <div className="d-flex justify-content-between my-2">
-                  <div>Tổng giá sản phẩm:</div>
-                  <div>{order.priceTotal.toLocaleString()}</div>
-                </div>
+
                 <div className="d-flex justify-content-between my-2">
                   <div>Khuyễn mãi:</div>
                   <div>{order.priceCoupon.toLocaleString()}</div>
@@ -92,10 +81,10 @@ export default function SuccessReply({ order, size }) {
                 <div className="d-flex justify-content-between my-2">
                   <div className="color-primary fs-5 fw-bold">
                     Thành Tiền:
-                    <div className={size === "full" ? "" : "line_bottom"}></div>
+                    <div className="line_bottom"></div>
                   </div>
                   <div className="color-primary fs-5 fw-bold">
-                    {order.priceAll.toLocaleString()}
+                    {order.priceTotal.toLocaleString()}
                   </div>
                 </div>
               </div>

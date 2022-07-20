@@ -1,5 +1,6 @@
 import axios from "axios";
 const url = "https://sever-coffeehouse.herokuapp.com";
+const urlDev = "https://localhost:3030";
 const addressMyShop = "180 Cao Lỗ, Quận 8 Hồ Chí Minh, Việt Nam";
 const nameShop = "Quán cà phê The Coffee House";
 const servicesShip = "SGN-EXPRESS"; //giao đồ ăn tại sài gòn
@@ -30,7 +31,7 @@ export const fetchListSearch = async (query) => {
   return list;
 };
 
-export const fetchTokenAhamove = async (query) => {
+export const fetchTokenAhamove = async () => {
   const token = await axios.get(
     "https://apistg.ahamove.com/v1/partner/register_account?mobile=84908842280&name=Ahamove+Test+User&api_key=test_key"
   );
@@ -108,4 +109,10 @@ export const createOrder = async (
     },
   });
   return order;
+};
+export const fetchMyOrder = async (phone) => {
+  const orders = await axios.post(`${urlDev}/getOrderForUser`, {
+    phone: phone,
+  });
+  return orders.data;
 };
