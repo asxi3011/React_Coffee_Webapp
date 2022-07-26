@@ -17,7 +17,7 @@ export default function DetailOrder({ order }) {
     order && (
       <div className="row mt-3">
         <div className="d-flex justify-content-center my-5">
-          <div className="col-12 p-4 rounded box-details-order">
+          <div className="col-12 p-4 rounded box-details-order-small">
             <h3 className="text-center fw-bold">Chi tiết đơn hàng</h3>
             <div>
               <div className="d-flex justify-content-between">

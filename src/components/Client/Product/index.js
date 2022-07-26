@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState,memo} from 'react'
 import { Link } from "react-router-dom";
 import Skeleton  from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -42,4 +42,4 @@ function CardProduct({product}) {
     )
 }
 
-export default CardProduct
+export default memo (CardProduct);

@@ -43,7 +43,6 @@ function Cart() {
   const payments = useSelector(getPayments);
   const priceShip = useSelector(getPriceShip);
   const tokenAhamove = useSelector(getTokenAhamove);
-  
   const validateEmail = (email) => {
     return String(email)
       .toLowerCase()

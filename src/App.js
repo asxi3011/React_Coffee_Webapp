@@ -84,7 +84,6 @@ function App() {
       dispatch(cartSlice.actions.setPhone(phoneCus));
       dispatch(cartSlice.actions.setAddress(addressCus));
       dispatch(cartSlice.actions.setNote(noteCus));
-
     const listNews = fetchNewsRequest();
     const listCategory = fetchCategoryRequest();
     const listProduct = fetchProductsRequest();
@@ -102,7 +101,6 @@ function App() {
       dispatch(categoriesSlice.actions.fetchCategory(categorys));
       dispatch(productSlice.actions.fetchProductsRequest(products));
       dispatch(newsSlice.actions.fetchNewsRequest(news));
-      console.log("đã load data 123");
       dispatch(modalSlice.actions.toggleLoading());
       setLoading(false);
     });

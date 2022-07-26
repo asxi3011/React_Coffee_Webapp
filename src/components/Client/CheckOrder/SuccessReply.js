@@ -15,7 +15,7 @@ export default function SuccessReply({ order, size }) {
   console.log("HERE", order);
   return (
     order && (
-      <div className="row h-100">
+      <div className="row">
         <div className="d-flex justify-content-center">
           <div
             className={

@@ -1,6 +1,7 @@
 import axios from "axios";
+import memoize from "lodash";
 const url = "https://sever-coffeehouse.herokuapp.com";
-const urlDev = "https://localhost:3030";
+const urlDev = "http://localhost:3030";
 const addressMyShop = "180 Cao Lỗ, Quận 8 Hồ Chí Minh, Việt Nam";
 const nameShop = "Quán cà phê The Coffee House";
 const servicesShip = "SGN-EXPRESS"; //giao đồ ăn tại sài gòn
@@ -116,3 +117,8 @@ export const fetchMyOrder = async (phone) => {
   });
   return orders.data;
 };
+export const fetchSlider = async () => {
+  const orders = await axios.get(`${urlDev}/slider`)
+  console.log("run API");
+  return orders.data;
+}  

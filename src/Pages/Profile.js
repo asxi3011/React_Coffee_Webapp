@@ -27,7 +27,7 @@ export default function Profile() {
           <div className="pd-y-220 section-Chapter">
             <div className="fs-3 d-flex align-items-center justify-content-center gap-2">
               <i className="fa-solid fa-user fs-4 color-primary" />
-              <span className="fw-bold">Tài khoản của bạn</span>
+              <span className="fw-bold">{selected==="profile"?"Tài khoản của bạn":selected==="history"?"Lịch sử đơn hàng":"Quyền lợi thành viên "}</span>
             </div>
             <div className="row d-flex justify-content-between wrap-profile gap-120 mt-5">
               <NewAccount ></NewAccount>

@@ -33,13 +33,7 @@ const DetailProduct = () => {
       sizeNameSelected: checked.name,
       sizeValueSelected: Number(checked.value),
     });
-  }, [checked, count]); // Chỉnh thay đổi giỏ hàng
-  useEffect(() => {
-    setCarts({
-      ...carts,
-      note: notes,
-    });
-  }, [notes]); // Chỉnh thay đổi giỏ hàng
+  }, [checked,info,notes, count]); // Chỉnh thay đổi giỏ hàng
   useEffect(() => {
     console.log("getAPI");
     const detailProduct = fetchDetailsProductRequest(slug);
